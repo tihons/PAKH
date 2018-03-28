@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="vn.com.vhc.pakh.AddRequest"
+    android:background="#ffff"
+    android:orientation="vertical"
+    android:weightSum="10">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.75"
+        android:text="Gửi yêu cầu"
+        android:textColor="#000000"
+        android:textSize="24sp"
+        android:gravity="center"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.025"
+        android:background="#f4f1f1"/>
+
+
+    <TextView
+                android:layout_marginLeft="5dp"
+                android:gravity="bottom"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.35"
+                android:text="Tiêu đề"
+                android:textSize="14sp"
+                android:textColor="@color/colorApp"/>
+
+    <EditText
+
+                android:id="@+id/tieuDe"
+                android:textSize="17sp"
+                android:gravity="bottom"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.7"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1.1"
+        android:orientation="horizontal"
+        android:weightSum="1.21">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            android:weightSum="1.1"
+            android:orientation="vertical">
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:gravity="bottom"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.4"
+                android:text="Loại hệ thống"
+                android:textSize="14sp"
+                android:textColor="@color/colorApp"/>
+
+            <Spinner
+                android:id="@+id/spnSysType"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.7" />
+
+        </LinearLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.005"
+            android:background="#c9c9c9"
+            android:layout_marginBottom="15dp"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            android:weightSum="1.1"
+            android:orientation="vertical">
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:gravity="bottom"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.4"
+                android:text="Yêu cầu cấp 1"
+                android:textSize="14sp"
+                android:textColor="@color/colorApp"/>
+
+            <Spinner
+                android:id="@+id/spnYC1"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.7"/>
+        </LinearLayout>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.005"
+            android:background="#c9c9c9"
+            android:layout_marginBottom="15dp"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.4"
+            android:weightSum="1.1"
+            android:orientation="vertical">
+            <TextView
+                android:layout_marginLeft="5dp"
+                android:gravity="bottom"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.4"
+                android:text="Yêu cầu cấp 2"
+                android:textSize="14sp"
+                android:textColor="@color/colorApp"/>
+            <Spinner
+                android:id="@+id/spnYC2"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.7"
+                android:weightSum="10"
+                android:orientation="horizontal"/>
+        </LinearLayout>
+
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.025"
+        android:background="#c9c9c9"/>
+
+    <TextView
+        android:layout_marginLeft="5dp"
+        android:gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.35"
+        android:text="Đơn vị xử lý"
+        android:textSize="14sp"
+        android:textColor="@color/colorApp"/>
+    <TextView
+        android:id="@+id/donViXuLy"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:textSize="17sp"
+        android:textColor="#000000"
+        android:layout_weight="0.7"
+        android:layout_marginLeft="5dp"
+        android:gravity="center|left"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.025"
+        android:background="#c9c9c9"/>
+    <TextView
+        android:layout_marginLeft="5dp"
+        android:gravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.4"
+        android:text="Nội dung yêu cầu"
+        android:textSize="14sp"
+        android:textColor="@color/colorApp"/>
+    <EditText
+        android:id="@+id/noiDung"
+        android:layout_marginHorizontal="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="start"
+        android:layout_weight="2.5"
+        android:background="@drawable/purport"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:weightSum="10">
+        <ImageButton
+            android:layout_marginLeft="5dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.5"
+            android:src="@drawable/crop_original"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.05"
+            android:background="#f4f1f1"
+            android:layout_marginBottom="8dp"
+            android:layout_marginVertical="5dp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3.2"
+            android:text="Nhận email khi kết thúc yêu cầu"
+            android:textSize="14sp"
+            android:textColor="#000"
+            android:gravity="center"/>
+
+        <CheckBox
+            android:id="@+id/nhanMail"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.05"
+            android:background="#f4f1f1"
+            android:layout_marginBottom="8dp"
+            android:layout_marginVertical="5dp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3.2"
+            android:text="Nhận SMS khi kết thúc yêu cầu"
+            android:textSize="14sp"
+            android:textColor="#000"
+            android:gravity="center"/>
+
+        <CheckBox
+            android:id="@+id/nhanSMS"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"/>
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.025"
+        android:background="#c9c9c9"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.15"/>
+    <Button
+        android:id="@+id/sendRequest"
+        android:layout_marginVertical="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.9"
+        android:text="Gửi yêu cầu"
+        android:background="@drawable/back_btn"
+        android:layout_marginHorizontal="100dp"
+        android:textColor="#fff"
+        android:textAllCaps="false"
+        android:textSize="20sp"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.1"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.8"
+        android:weightSum="1"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btnBanNhap"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:text="Lưu bản nháp"
+            android:textSize="20sp"
+            android:background="@drawable/back_btn"
+            android:layout_marginHorizontal="12dp"
+            android:textColor="#fff"
+            android:textAllCaps="false"
+            android:gravity="center"/>
+
+        <Button
+            android:id="@+id/boqua"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:text="Bỏ qua"
+            android:textSize="20sp"
+            android:layout_marginHorizontal="12dp"
+            android:background="@drawable/back_btn"
+            android:textColor="#fff"
+            android:textAllCaps="false"/>
+    </LinearLayout>
+
+
+
+
+
+
+
+</LinearLayout>

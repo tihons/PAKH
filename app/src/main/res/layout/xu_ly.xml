@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="10"
+    tools:context="vn.com.vhc.pakh.XuLy">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.6"
+        android:text="Xử lý yêu cầu"
+        android:textSize="22sp"
+        android:textColor="#000000"
+        android:gravity="center"
+        android:background="#ededed"/>
+    <ScrollView
+        android:background="#ffffff"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="9.2">
+        <LinearLayout
+            android:layout_marginHorizontal="10dp"
+
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:gravity="bottom|left"
+                android:text="NGUYÊN NHÂN YÊU CẦU CẤP 1 - 2"
+                android:textColor="@color/colorApp" />
+            <Spinner
+                android:id="@+id/spNNNYCC1"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                tools:ignore="DuplicateIds" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorApp"/>
+            <Spinner
+                android:id="@+id/spNNNYCC2"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorApp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="NỘI DUNG XỬ LÝ"
+                android:gravity="bottom|left"
+                android:textColor="@color/colorApp"/>
+
+            <EditText
+                android:id="@+id/noidungXL"
+                android:layout_width="match_parent"
+                android:layout_height="160dp"
+                android:background="@drawable/bgr_request"
+                android:fadeScrollbars="true"
+                android:gravity="start" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:text="NỘI DUNG XỬ LÝ NỘI BỘ"
+                android:gravity="bottom|left"
+                android:textColor="@color/colorApp"/>
+            <EditText
+                android:id="@+id/noidungXL2"
+                android:layout_width="match_parent"
+                android:layout_height="170dp"
+                android:gravity="top|left"
+                android:background="@drawable/bgr_request"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="20dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.8"
+                android:weightSum="1"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btnOver"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:text="Kết thúc"
+                    android:textSize="20sp"
+                    android:background="@drawable/back_btn"
+                    android:textColor="#fff"
+                    android:textAllCaps="false"
+                    android:gravity="center"
+                    android:layout_marginRight="15dp"/>
+
+                <Button
+                    android:id="@+id/btnChuyenTiep"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5"
+                    android:text="Chuyển tiếp"
+                    android:textSize="20sp"
+                    android:layout_marginLeft="15dp"
+                    android:background="@drawable/back_btn"
+                    android:textColor="#fff"
+                    android:textAllCaps="false"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/shortContent"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:gravity="center|left"
+                android:text="NỘI DUNG XỬ LÝ GẦN NHẤT"
+                android:textColor="@color/colorApp"
+                android:textSize="17sp"
+                android:textStyle="normal"
+                android:onClick="editActions"
+                android:clickable="true"
+                tools:ignore="OnClick" />
+
+            <LinearLayout
+                android:id="@+id/layoutForward"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/truoc1"
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:gravity="center"
+                    android:text="NGUYÊN NHÂN YÊU CẦU CẤP 1 - 2"
+                    android:textColor="@color/colorDaXL" />
+                <TextView
+                    android:id="@+id/truoc2"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"
+                    android:gravity="center"
+                    tools:ignore="DuplicateIds" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorApp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp"/>
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/colorApp"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="NỘI DUNG XỬ LÝ"
+                    android:gravity="bottom|left"
+                    android:textColor="@color/colorDaXL"/>
+
+                <TextView
+                    android:id="@+id/contentForward1"
+                    android:layout_width="match_parent"
+                    android:layout_height="160dp"
+                    android:background="@drawable/bgr_request"
+                    android:layout_gravity="start"
+                    android:fadeScrollbars="true"
+                    android:gravity="start" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:text="NỘI DUNG XỬ LÝ NỘI BỘ"
+                    android:gravity="bottom|left"
+                    android:textColor="@color/colorDaXL"/>
+                <TextView
+                    android:id="@+id/contentForward2"
+                    android:layout_width="match_parent"
+                    android:layout_gravity="start"
+                    android:layout_height="170dp"
+                    android:gravity="top|left"
+                    android:background="@drawable/bgr_request"
+                    />
+                <TextView
+                    android:id="@+id/textViewGoneDetail"
+                    android:layout_width="wrap_content"
+                    android:layout_height="60dp"
+                    android:gravity="center|left"
+                    android:text="NỘI DUNG XỬ LÝ GẦN NHẤT"
+                    android:textColor="@color/colorApp"
+                    android:textSize="17sp"
+                    android:textStyle="normal"
+                    android:onClick="goneDetail"
+                    android:clickable="true"
+                    tools:ignore="OnClick" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+    </ScrollView>
+
+</LinearLayout>

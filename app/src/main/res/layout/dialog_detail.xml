@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="5dp">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:text="Chú thích"
+        android:textColor="#000"
+        android:textSize="20sp"
+        android:gravity="center"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:weightSum="10"
+        android:orientation="horizontal">
+        <TextView
+            android:paddingLeft="20dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2.5"
+            android:text="PCXL"
+            android:textSize="20sp"
+            android:textColor="#000"
+            android:gravity="bottom|left"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="7"
+            android:text="Phân công xử lý"
+            android:textSize="18sp"
+            android:textColor="@color/colorApp"
+            android:gravity="right|bottom"/>
+    </LinearLayout>
+
+    <View
+        android:layout_marginHorizontal="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#f4f1f1"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:weightSum="10"
+        android:orientation="horizontal">
+        <TextView
+            android:paddingLeft="20dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2.5"
+            android:text="ĐAXL"
+            android:textSize="20sp"
+            android:textColor="#000"
+            android:gravity="center|bottom|left"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="7"
+            android:text="Đang xử lý"
+            android:textSize="18sp"
+            android:textColor="@color/colorApp"
+            android:gravity="center|right|bottom"/>
+    </LinearLayout>
+    <View
+        android:layout_marginHorizontal="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#f4f1f1"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:weightSum="10"
+        android:orientation="horizontal">
+        <TextView
+            android:paddingLeft="20dp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2.5"
+            android:text="ĐXL"
+            android:textSize="20sp"
+            android:textColor="#000"
+            android:gravity="bottom"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="7"
+            android:text="Đã xử lý"
+            android:textSize="18sp"
+            android:textColor="@color/colorApp"
+            android:gravity="right|bottom"/>
+    </LinearLayout>
+    <View
+        android:layout_marginHorizontal="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#f4f1f1"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:weightSum="10"
+        android:orientation="horizontal">
+        <View
+            android:layout_marginLeft="20dp"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="2"
+            android:background="#ffe600"
+            android:layout_gravity="bottom|left"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="7.5"
+            android:text="Khẩn cấp"
+            android:textSize="18sp"
+            android:textColor="@color/colorApp"
+            android:gravity="right|bottom"/>
+
+    </LinearLayout>
+
+    <View
+        android:layout_marginHorizontal="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#f4f1f1"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:weightSum="10"
+        android:orientation="horizontal">
+        <View
+            android:layout_marginLeft="20dp"
+            android:layout_width="0dp"
+            android:layout_height="30dp"
+            android:layout_weight="2"
+            android:background="#ff0000"
+            android:layout_gravity="bottom|left"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="7.5"
+            android:text="Rất khuẩn cấp"
+            android:textSize="18sp"
+            android:textColor="@color/colorApp"
+            android:gravity="right|bottom"/>
+    </LinearLayout>
+
+    <View
+        android:layout_marginHorizontal="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#f4f1f1"/>
+
+</LinearLayout>
