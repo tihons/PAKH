@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -43,6 +42,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -65,17 +65,16 @@ public class XuLy extends AppCompatActivity {
     ContentShortInfo  contentShortInfo = new ContentShortInfo();
 
     URL urlUpdateDetail = null;
+    URL urlUpdateRequest = null;
 
     private int id, ordering;
     private String causeCode, causeName, isEnable,createdBy, isParent,depCode, isStatus, systemCode,idHas;
 
     Button btnOver, btnChuyenTiep;
     EditText content, contentPrivate;
-
     TextView muc1, muc2, noidung1, noidung2, goneRequestDetail;
 
     String ticketid, ID;
-
     DictionnaryCauseInfo dictionnaryCauseInfo;
 
     JSONArray arrayCase1, arrayCase2;
@@ -87,17 +86,15 @@ public class XuLy extends AppCompatActivity {
 
     String dic_code_id_private, dic_code_id;
 
-    LinearLayout mainLayout;
     LinkAPI linkapi = new LinkAPI();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.xu_ly);
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        ticketid = getIntent().getExtras().getString("TicketID");
-        ID = getIntent().getExtras().getString("ID");
+//        ticketid = getIntent().getExtras().getString("TicketID");
+//        ID = getIntent().getExtras().getString("ID");
         final LinearLayout layoutForward = (LinearLayout) findViewById(R.id.layoutForward);
 
         new ReadJSONForward().execute(linkapi.linkForward+ticketid);
@@ -138,19 +135,16 @@ public class XuLy extends AppCompatActivity {
             }
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
                 adapterCause2.clear();
                 dic_code_id = listCause1.get(i).getCauseCode();
                 int id = listCause1.get(i).getId();
                 new ReadJSONObjectCause2().execute(linkapi.linkCause+"level=2&id_parent="+id);
-
             }
         });
 
         spnCause2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
                 dic_code_id_private = listCause2.get(i).getCauseCode();
             }
 
@@ -160,82 +154,26 @@ public class XuLy extends AppCompatActivity {
             }
         });
 
-
-
         btnOver.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
 
-//                try {
-//                    urlUpdateDetail = new URL("http://14.160.91.174:9080/request/updateRequestDetail/2?");
-//                } catch (MalformedURLException e) {
-//                    e.printStackTrace();
-//                }
-//                DefaultHttpClient client = new DefaultHttpClient();
-//                HttpPut put= new HttpPut(String.valueOf(urlUpdateDetail));
-//
-//                List<NameValuePair> pairs = new ArrayList<NameValuePair>();
-//                pairs.add(new BasicNameValuePair("receiving_date", "06-03-2018"));
-//                pairs.add(new BasicNameValuePair("receiving_dep_code", "xxx"));
-//                pairs.add(new BasicNameValuePair("receiving_user", "thuongnv"));
-//                pairs.add(new BasicNameValuePair("actualy_finish", "07-03-2018"));
-//                pairs.add(new BasicNameValuePair("return_content", "Hom nay toi chuyen nha"));
-//                pairs.add(new BasicNameValuePair("return_content_private", "Dia diem la toi nay"));
-//                pairs.add(new BasicNameValuePair("dic_cause_id", ""));
-//                pairs.add(new BasicNameValuePair("dic_cause_id_private", ""));
-//                pairs.add(new BasicNameValuePair("file_id", ""));
+                if (content.length() == 0 || contentPrivate.length() == 0){
+                    showAlertDialogNullContent();
+                }else{
 
-//                try {
-//                    put.setEntity(new UrlEncodedFormEntity(pairs));
-//                    HttpResponse response = client.execute(put);
-//
-//                } catch (UnsupportedEncodingException e) {
-//                    e.printStackTrace();
-//                } catch (ClientProtocolException e) {
-//                    e.printStackTrace();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            putRequestDetail();
+                            putRequest();
+                        }
+                    });
+                    thread.start();
 
-//                RequestQueue queue;
-//                queue = Volley.newRequestQueue(this);
-//
-//                String url = "http://14.160.91.174:9080/request/updateRequestDetail/2?";
-//
-//                StringRequest putRequest = new StringRequest(Request.Method.PUT, url,
-//                        new Response.Listener<String>()
-//                        {
-//                            @Override
-//                            public void onResponse(String response) {
-//                                // response
-//                                Log.d("Response", response);
-//                            }
-//                        },
-//                        new Response.ErrorListener()
-//                        {
-//                            @Override
-//                            public void onErrorResponse(VolleyError error) {
-//                                // error
-//                                Log.d("Error.Response", response);
-//                            }
-//                        }
-//                ) {
-//
-//                    @Override
-//                    protected Map<String, String> getParams()
-//                    {
-//                        Map<String, String>  params = new HashMap<String, String> ();
-//                        params.put("parameter1", "value1");
-//                        params.put("parameter2", "value2");
-//
-//                        return params;
-//                    }
-//
-//                };
-////
-//                queue.add(putRequest);
-
-                new PutRequest().execute(linkapi.linkPut);
+                    Intent intent = new Intent(XuLy.this, ShowRequest.class );
+                    XuLy.this.startActivity(intent);
+                }
             }
         });
 
@@ -274,6 +212,74 @@ public class XuLy extends AppCompatActivity {
 
             }
         });
+
+    }
+    public void putRequestDetail(){
+
+        try {
+            urlUpdateDetail = new URL(linkapi.linkPutRequestDetail+ID+"?");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        DefaultHttpClient client = new DefaultHttpClient();
+        HttpPut put= new HttpPut(String.valueOf(urlUpdateDetail));
+
+        List<NameValuePair> pairs = new ArrayList<NameValuePair>();
+        pairs.add(new BasicNameValuePair("receiving_dep_code", userInfo.getDepartmentCode()));
+        pairs.add(new BasicNameValuePair("receiving_user", userInfo.getUsername()));
+        pairs.add(new BasicNameValuePair("return_content", content.getText().toString()));
+        pairs.add(new BasicNameValuePair("return_content_private", contentPrivate.getText().toString()));
+        pairs.add(new BasicNameValuePair("dic_cause_id", dic_code_id));
+        pairs.add(new BasicNameValuePair("dic_cause_id_private", dic_code_id_private));
+        pairs.add(new BasicNameValuePair("file_id", ""));
+
+        try {
+            put.setEntity(new UrlEncodedFormEntity(pairs));
+            HttpResponse response = client.execute(put);
+
+            Log.e("XULY", ""+response);
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void putRequest(){
+
+        try {
+            urlUpdateRequest = new URL(linkapi.linkPutRequest+ticketid+"?");
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        DefaultHttpClient client = new DefaultHttpClient();
+        HttpPut put= new HttpPut(String.valueOf(urlUpdateRequest));
+
+
+
+        List<NameValuePair> pairs = new ArrayList<NameValuePair>();
+        pairs.add(new BasicNameValuePair("pro_content", ""+content.getText().toString()));
+        pairs.add(new BasicNameValuePair("pro_user", ""+userInfo.getUsername()));
+        pairs.add(new BasicNameValuePair("pro_dep_code", userInfo.getDepartmentCode()));
+
+
+        try {
+            put.setEntity(new UrlEncodedFormEntity(pairs));
+            HttpResponse response = client.execute(put);
+
+            Log.e("XULY", ""+response);
+
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
     public void showAlertDialogNullContent(){
@@ -516,7 +522,6 @@ public class XuLy extends AppCompatActivity {
                 contentShortInfo.setFile_id(file_id);
 
 //                Toast.makeText(getApplicationContext(), contentShortInfo.getId(), Toast.LENGTH_LONG).show();
-
                 Log.e(TAG, "ooooooooooooooooooo: "+contentShortInfo.toString());
 
                 muc1.setText(""+contentShortInfo.getDic_cause_id());
@@ -586,8 +591,6 @@ public class XuLy extends AppCompatActivity {
             return null;
         }
         private void postData() {
-
-
 
         }
     }

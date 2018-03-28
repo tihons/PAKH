@@ -19,7 +19,8 @@ public class LinkAPI {
     public String linkSendRQ = api+"/request/post?";
     public String linkYeuCau = api+"/request/type?";
     public String linkCause = api+"/cause?";
-    public String linkPut = api+"/request/updateRequestDetail/2?";
+    public String linkPutRequestDetail = api+"/request/updateRequestDetail/";
+    public String linkPutRequest = api+"/request/updateRequest/";
 
 //    http://103.199.78.64:80 Mobifone API
 //    http://14.160.91.174:9080
