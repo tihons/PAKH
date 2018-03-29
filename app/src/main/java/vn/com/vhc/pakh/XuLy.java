@@ -115,8 +115,6 @@ public class XuLy extends AppCompatActivity {
 
         textViewShow.setPaintFlags(textViewShow.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
 
-
-
         adapterCause1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
         adapterCause1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnCause1.setAdapter(adapterCause1);
@@ -246,7 +244,6 @@ public class XuLy extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public void putRequest(){

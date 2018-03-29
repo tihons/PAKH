@@ -73,7 +73,7 @@ public class Login extends AppCompatActivity {
     }
 
     private void startCheckPass() {
-        countDownTimer = new CountDownTimer(100, 51) {
+        countDownTimer = new CountDownTimer(200, 100) {
 
             @Override
             public void onTick(long millisUntilFinished) {
@@ -90,7 +90,7 @@ public class Login extends AppCompatActivity {
     }
 
     private void ParseInputData() {
-        new Read_UserInfo().execute(linkapi.linkLogin+userInput);
+        new Read_UserInfo().execute(linkapi.linkLogin+"username="+userInput+"&password="+passInput);
     }
 
     private void CheckPass() {

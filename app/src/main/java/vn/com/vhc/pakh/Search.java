@@ -19,8 +19,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,6 +47,12 @@ public class Search extends AppCompatActivity {
 
     ArrayList<String> arrayJsondata = new ArrayList<String>();
     ArrayList<String> hethongList = new ArrayList<String>();
+
+//    ArrayList<String> dvgName = new ArrayList<String>();
+//    ArrayList<String> nguoiguiName = new ArrayList<String>();
+//    ArrayList<String> dvxlName = new ArrayList<String>();
+//    ArrayList<String> nguoixlName = new ArrayList<String>();
+
     ArrayList<Department> donviguiList = new ArrayList<Department>();
     ArrayList<Staff> nguoiguiList = new ArrayList<Staff>();
     ArrayList<Department> donvixulyList = new ArrayList<Department>();
@@ -69,14 +73,11 @@ public class Search extends AppCompatActivity {
         setContentView(R.layout.search);
 
         addView();
-        addAdapter();
         Date();
-
+        addAdapter();
         new ReadJSONObject().execute();
         hethongAdapter.notifyDataSetChanged();
-
         ClickEvents();
-
     }
 
     private void addView() {
@@ -241,18 +242,12 @@ public class Search extends AppCompatActivity {
 
         @Override
         protected ArrayList<String> doInBackground(Void... params) {
-            String [] api = {linkapi.linkHT, linkapi.linkDepart, linkapi.linkPCXL, linkapi.linkDANGXL, linkapi.linkDAXL};
+            String [] api = {linkapi.linkHT, linkapi.linkDepart, linkapi.linkStatusNumber+"PHAN_CONG_XU_LY",
+                    linkapi.linkStatusNumber+"DANG_XU_LY", linkapi.linkStatusNumber+"DA_XU_LY"};
 
             for (int i = 0; i < api.length; i++) {
                 arrayJsondata.add(docNoiDung_Tu_URL(api[i]));
             }
-            getlistHethong();
-            getlistDonvigui();
-            getlistDonvixuly();
-
-            PCXL = arrayJsondata.get(2);
-            DANGXL = arrayJsondata.get(3);
-            DAXL = arrayJsondata.get(4);
 
             return arrayJsondata;
         }
@@ -260,6 +255,12 @@ public class Search extends AppCompatActivity {
         @Override
         protected void onPostExecute(ArrayList<String> result) {
             super.onPostExecute(result);
+            getlistHethong();
+            getlistDonvigui();
+            getlistDonvixuly();
+            PCXL = arrayJsondata.get(2);
+            DANGXL = arrayJsondata.get(3);
+            DAXL = arrayJsondata.get(4);
         }
     }
 
@@ -351,6 +352,7 @@ public class Search extends AppCompatActivity {
                 String departmentName = obj.getString("departmentName");
                 Department dpm = new Department(Id, departmentCode, departmentName);
                 donviguiList.add(dpm);
+//                dvgName.add(donviguiList.get(i).getDepartmentName());
                 donviguiAdapter.add(donviguiList.get(i).getDepartmentName());
             }
         } catch (JSONException e) {
@@ -375,6 +377,7 @@ public class Search extends AppCompatActivity {
                 String isenable = obj.getString("isEnable");
                 Staff staff = new Staff(Id, username, password, fullname, position, phone, gender, email, departmentCode, isenable);
                 nguoiguiList.add(staff);
+//                nguoiguiName.add(nguoiguiList.get(i).getFullname());
                 nguoiguiAdapter.add(nguoiguiList.get(i).getFullname());
             }
         } catch (JSONException e) {
@@ -395,6 +398,7 @@ public class Search extends AppCompatActivity {
                 String departmentName = obj.getString("departmentName");
                 Department dpm = new Department(Id, departmentCode, departmentName);
                 donvixulyList.add(dpm);
+//                dvxlName.add(donvixulyList.get(i).getDepartmentName());
                 donvixulyAdapter.add(donvixulyList.get(i).getDepartmentName());
             }
         } catch (JSONException e) {
@@ -419,6 +423,7 @@ public class Search extends AppCompatActivity {
                 String isenable = obj.getString("isEnable");
                 Staff staff = new Staff(Id, username, password, fullname, position, phone, gender, email, departmentCode, isenable);
                 nguoixulyList.add(staff);
+//                nguoixlName.add(nguoixulyList.get(i).getFullname());
                 nguoixulyAdapter.add(nguoixulyList.get(i).getFullname());
             }
         } catch (JSONException e) {

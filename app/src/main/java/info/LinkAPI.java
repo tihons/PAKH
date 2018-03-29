@@ -5,14 +5,12 @@ package info;
  */
 
 public class LinkAPI {
-    private String api = "http://14.160.91.174:9080";
-    public String linkLogin = api+"/user/";
+    private String api = "http://103.199.78.64:80";
+    public String linkLogin = api+"/user?";
     public String linkHT = api+"/sys/KT";
     public String linkDepart = api+"/depart";
     public String linkStaff = api+"/staff/";
-    public String linkPCXL = api+"/request/num/PHAN_CONG_XU_LY";
-    public String linkDANGXL = api+"/request/num/DANG_XU_LY";
-    public String linkDAXL = api+"/request/num/DA_XU_LY";
+    public String linkStatusNumber = api+"/request/num/";
     public String linkSearchRQ = api+"/request/get?";
     public String linkForward = api+"/request/recent/";
     public String linkResponse = api+"/request/response?";

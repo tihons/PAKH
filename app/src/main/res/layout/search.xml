@@ -122,12 +122,6 @@
                 android:layout_width="50dp"
                 android:layout_height="35dp"
                 android:layout_weight="0.5" />
-            <!--<EditText-->
-
-            <!--android:gravity="bottom"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="0.5"/>-->
             <Spinner
                 android:id="@+id/nguoigui"
                 android:layout_width="50dp"
@@ -293,12 +287,6 @@
                 android:textColorHint="#05ab9a"
                 android:layout_weight="0.5"
                 />
-            <!--<EditText-->
-
-            <!--android:gravity="bottom"-->
-            <!--android:layout_width="0dp"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:layout_weight="0.5"/>-->
 
         </LinearLayout>
 

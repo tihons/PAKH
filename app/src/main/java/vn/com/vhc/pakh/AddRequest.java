@@ -88,26 +88,55 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
         userDepart = userInfo.getDepartmentCode();
         userAPI_info = "&username="+userName+"&departmentCode="+userDepart;
 
+        addView();
+        addAdapter();
+
+        new ReadSystemType().execute(linkapi.linkHT);
+
+        ClickEvents();
+    }
+
+    private void addView() {
         title = (EditText) findViewById(R.id.tieuDe);
         content =(EditText) findViewById(R.id.noiDung);
 
         receiveMail = (CheckBox) findViewById(R.id.nhanMail);
         receiveSMS =  (CheckBox) findViewById(R.id.nhanSMS);
-
         doViXL = (TextView) findViewById(R.id.donViXuLy);
-
-        receiveSMS.setOnClickListener(this);
-        receiveMail.setOnClickListener(this);
 
         sendRequest = (Button) findViewById(R.id.sendRequest);
         btnRequestOne = (Button) findViewById(R.id.btnBanNhap);
         btnRight = (Button) findViewById(R.id.boqua);
 
+        spnSysType = (Spinner) findViewById(R.id.spnSysType);
+        spnYCCap1 = (Spinner) findViewById(R.id.spnYC1);
+        spnYCCap2 = (Spinner) findViewById(R.id.spnYC2);
+    }
 
+    private void addAdapter() {
+        adapterSysType = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+        adapterSysType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spnSysType.setAdapter(adapterSysType);
+
+        adapterYeuCau = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+        adapterYeuCau.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        adaperYC2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+        adaperYC2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        spnYCCap2.setAdapter(adaperYC2);
+        spnYCCap1.setAdapter(adapterYeuCau);
+    }
+
+    private void ClickEvents() {
+        receiveSMS.setOnClickListener(this);
+        receiveMail.setOnClickListener(this);
         receiveSMS.setChecked(true);
         receiveMail.setChecked(true);
         checkSMS = "Y";
         checkMail = "Y";
+
         receiveMail.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton btnViewMail, boolean b) {
@@ -122,7 +151,6 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
         });
 
         receiveSMS.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
             public void onClick(View view) {
 
             }
@@ -140,7 +168,6 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
         btnRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 showAlertDialog();
             }
         });
@@ -149,60 +176,31 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
             @Override
             public void onClick(View view) {
 
-
             }
         });
         sendRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 if (title.length() == 0 || content.length() == 0){
                     showAlertDialogNullContent();
                 } else {
                     new SendPostRequest().execute(linkapi.linkSendRQ);
                     Toast.makeText(getApplicationContext(), "Gửi yêu cầu thành công", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(AddRequest.this,  Dashboard.class);
+                    Intent intent = new Intent(AddRequest.this, Dashboard.class);
                     startActivity(intent);
                 }
-
             }
         });
-
-        spnSysType = (Spinner) findViewById(R.id.spnSysType);
-        adapterSysType = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
-        adapterSysType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spnSysType.setAdapter(adapterSysType);
-
-        spnYCCap1 = (Spinner) findViewById(R.id.spnYC1);
-        //implementing OnItemSelectedListener (need to override the method)
-        adapterYeuCau = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
-        adapterYeuCau.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        spnYCCap2 = (Spinner) findViewById(R.id.spnYC2);
-
-        adaperYC2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
-        adaperYC2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spnYCCap2.setAdapter(adaperYC2);
-
-        spnYCCap1.setAdapter(adapterYeuCau);
-
-        new ReadSystemType().execute(linkapi.linkHT);
-
-        spnSysType.setSelection(0);
 
         spnSysType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
-
-
                 adapterYeuCau.clear();
                 adaperYC2.clear();
 
                 String syscode = listSystemType.get(pos).getSysType();
                 linkC1 = linkapi.linkYeuCau+userAPI_info+"&systemCode="+syscode;
                 new ReadJSONObjectYCCap1().execute(linkC1);
-
 //                isHas = listCap1.get(0).getId();
             }
 
@@ -216,13 +214,11 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
         spnYCCap1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
                 adaperYC2.clear();
                 int isHas = listCap1.get(i).getId();
                 donvixuli = listCap1.get(i).getRequestName();
                 doViXL.setText(donvixuli);
                 new ReadJSONObjectYCCap2().execute(linkC1+"&isHas="+isHas);
-
             }
 
             @Override
@@ -243,11 +239,8 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
 
             }
         });
-
-
-
-
     }
+
     public void showAlertDialog(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Hủy yêu cầu");
@@ -283,7 +276,6 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
         });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
-
     }
 
 
@@ -320,8 +312,6 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
             super.onPostExecute(s);
 
             try {
-
-
                 JSONArray arrSysType = new JSONArray(s);
 
                 for (int i = 0; i < arrSysType.length(); i ++){
@@ -393,11 +383,9 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
                     listCap1.add(yeuCauInfo);
                     adapterYeuCau.add(""+listCap1.get(i).getRequestName());
                 }
-
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-
         }
     }
 
@@ -449,7 +437,6 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
                     yeuCauInfo.setIsEnable(isEnable);
                     yeuCauInfo.setIsStatus(isStatus);
 
-
                     listCap2.add(yeuCauInfo);
                     adaperYC2.add(""+listCap2.get(i).getRequestName());
                 }
@@ -463,9 +450,7 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
     public class SendPostRequest extends AsyncTask<String, String, String> {
         @Override
         protected String doInBackground(String... strings) {
-
             postData();
-
             return null;
         }
         private void postData() {
@@ -507,7 +492,6 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
                 // TODO Auto-generated catch block
             }
         }
-
     }
 }
 
