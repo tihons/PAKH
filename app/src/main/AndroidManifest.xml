@@ -22,12 +22,13 @@
             </intent-filter>
         </activity>
         <activity android:name=".Dashboard" />
-        <activity android:name=".Search" />
+        <activity android:name=".SearchUserSRQ" />
         <activity android:name=".XuLy" />
         <activity android:name=".AddRequest" />
         <activity android:name=".Detail" />
-        <activity android:name=".ShowRequest" />
-        <activity android:name=".RequestofUser"></activity>
+        <activity android:name=".ShowUserSRQ" />
+        <activity android:name=".ShowUserPRQ" />
+        <activity android:name=".SearchUserPRQ"></activity>
     </application>
 
 </manifest>

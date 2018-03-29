@@ -6,13 +6,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.HashMap;
+
 import info.UserInfo;
 
 public class Dashboard extends AppCompatActivity {
 
-    Button searchrq, addrq, prorq, logout;
+    Button searchsrq, addrq, searchprq, logout;
     TextView hello;
 
+    UserSessionManager session;
     UserInfo userInfo = new UserInfo();
 
     @Override
@@ -20,13 +25,20 @@ public class Dashboard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dashboard);
 
-        hello = (TextView) findViewById(R.id.dashboardText) ;
-        searchrq = (Button) findViewById(R.id.searchRQ);
+        session = new UserSessionManager(getApplicationContext());
+
+        searchsrq = (Button) findViewById(R.id.searchSRQ);
         addrq = (Button) findViewById(R.id.addRQ);
-        prorq = (Button) findViewById(R.id.proRQ);
+        searchprq = (Button) findViewById(R.id.searchPRQ);
         logout = (Button) findViewById(R.id.logout);
 
-        hello.setText("Xin Chào "+userInfo.getFullname());
+        Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
+
+        session.checkLogin();
+
+        HashMap<String, String> user = session.getUserDetails();
+        String name = user.get(UserSessionManager.KEY_NAME);
+        String email = user.get(UserSessionManager.KEY_EMAIL);
 
         addrq.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -36,19 +48,19 @@ public class Dashboard extends AppCompatActivity {
             }
         });
 
-        searchrq.setOnClickListener(new View.OnClickListener() {
+        searchsrq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Dashboard.this, Search.class);
+                Intent intent = new Intent(Dashboard.this, SearchUserSRQ.class);
                 Dashboard.this.startActivity(intent);
             }
         });
 
-        prorq.setOnClickListener(new View.OnClickListener() {
+        searchprq.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String user = userInfo.getUsername();
-                Intent intent = new Intent(Dashboard.this, RequestofUser.class);
+                Intent intent = new Intent(Dashboard.this, SearchUserPRQ.class);
                 intent.putExtra("User", user);
                 Dashboard.this.startActivity(intent);
             }
@@ -57,8 +69,7 @@ public class Dashboard extends AppCompatActivity {
         logout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Dashboard.this, Login.class);
-                Dashboard.this.startActivity(intent);
+                session.logoutUser();
             }
         });
     }

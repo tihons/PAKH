@@ -10,22 +10,6 @@
     tools:context="vn.com.vhc.pakh.Dashboard"
     android:background="@drawable/background">
 
-    <LinearLayout
-        android:layout_weight="1"
-        android:layout_width="match_parent"
-        android:layout_height="20dp">
-
-        <TextView
-            android:id="@+id/dashboardText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Dashboard"
-            android:textAllCaps="true"
-            android:textColor="#fff"
-            android:textSize="30sp" />
-    </LinearLayout>
-
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="100dp"
@@ -54,7 +38,7 @@
                 android:drawableTop="@drawable/ic_add_circle"/>
 
             <Button
-                android:id="@+id/searchRQ"
+                android:id="@+id/searchSRQ"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
@@ -77,7 +61,7 @@
             android:layout_marginTop="5dp">
 
             <Button
-                android:id="@+id/proRQ"
+                android:id="@+id/searchPRQ"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
@@ -112,6 +96,6 @@
         android:layout_marginTop="50dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/ic_mobifonelogo">
+        android:background="@drawable/mobilogo_header">
     </LinearLayout>
 </LinearLayout>

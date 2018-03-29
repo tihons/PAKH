@@ -29,28 +29,28 @@ import java.util.ArrayList;
 import info.LinkAPI;
 import info.Request;
 
-public class RequestofUser extends AppCompatActivity {
-
-    String user;
+public class ShowUserPRQ extends AppCompatActivity {
 
     ListView requestView;
     RequestAdapter rqAdapter;
     LayoutInflater inflater;
-    ImageButton infoRQ;
 
     ArrayList<Request> rqList;
-    LinkAPI linkapi = new LinkAPI();
-    String linkToSearch;
 
+    LinkAPI linkapi = new LinkAPI();
+    String startReqDate, endReqDate, reqTitle, reqSystemCode, reqDepCode,
+            reqUser, proDepCode, proUser, ticketId, reqStatus, linkToSearch;
+
+    ImageButton infoRQ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_requestof_user);
+        setContentView(R.layout.show_request);
 
         dataSearch();
 
         inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        requestView = (ListView) findViewById(R.id.requestUserList);
+        requestView = (ListView) findViewById(R.id.requestView);
 
         rqList = new ArrayList<Request>();
         new SearchRequest().execute(linkToSearch);
@@ -59,7 +59,7 @@ public class RequestofUser extends AppCompatActivity {
         requestView.addHeaderView(header);
         header.setBackgroundColor(Color.parseColor("#30336b"));
 
-        infoRQ = (ImageButton) findViewById(R.id.chuthich);
+        infoRQ = (ImageButton) findViewById(R.id.infoRequest);
         infoRQ.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,21 +70,67 @@ public class RequestofUser extends AppCompatActivity {
         requestView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String ID = rqList.get(position-1).getStt();
-                String ticketID = rqList.get(position-1).getTicketid();
+                String rqTitle = rqList.get(position-1).getReq_title();
+                String rqContent = rqList.get(position-1).getReq_content();
+                String rqSysCode = rqList.get(position-1).getReq_system_code();
+                String proDepCode = rqList.get(position-1).getPro_dep_code();
+                String proUser = rqList.get(position-1).getPro_user();
+                String proActua = rqList.get(position-1).getPro_actua();
+                String proPlan = rqList.get(position-1).getPro_plan();
+                String proContent = rqList.get(position-1).getPro_content();
 
-                Intent intent = new Intent(RequestofUser.this, XuLy.class);
-                intent.putExtra("ID", ID);
-                intent.putExtra("TicketID", ticketID);
+                Intent intent = new Intent(ShowUserPRQ.this, Detail.class);
+                intent.putExtra("RqTitle", rqTitle);
+                intent.putExtra("RqContent", rqContent);
+                intent.putExtra("RqSysCode", rqSysCode);
+                intent.putExtra("ProDepCode", proDepCode);
+                intent.putExtra("ProUser", proUser);
+                intent.putExtra("ProActua", proActua);
+                intent.putExtra("ProPlan", proPlan);
+                intent.putExtra("ProContent", proContent);
 
-                RequestofUser.this.startActivity(intent);
+                ShowUserPRQ.this.startActivity(intent);
             }
         });
     }
 
     private void dataSearch() {
-        user = getIntent().getExtras().getString("User");
-        linkToSearch = linkapi.linkSearchRQ+"start_req_date="+"03-01-2017"+"&end_req_date="+"15-03-2018"+"&pro_user="+user;
+        startReqDate = getIntent().getExtras().getString("fromtime");
+        endReqDate = getIntent().getExtras().getString("totime");
+        reqTitle = getIntent().getExtras().getString("tieude");
+        reqSystemCode = getIntent().getExtras().getString("hethong");
+        reqDepCode = getIntent().getExtras().getString("donvigui");
+        reqUser = getIntent().getExtras().getString("nguoigui");
+        proDepCode = getIntent().getExtras().getString("donvixuly");
+        proUser = getIntent().getExtras().getString("nguoixuly");
+        ticketId = getIntent().getExtras().getString("mayeucau");
+        reqStatus = getIntent().getExtras().getString("trangthai");
+
+        linkToSearch = linkapi.linkSearchRQ+"start_req_date="+startReqDate+"&end_req_date="+endReqDate;
+        if(!reqTitle.equals("")&&!reqTitle.equals(null)) {
+            linkToSearch = linkToSearch+"&req_title="+reqTitle;
+        }
+        if (!reqSystemCode.equals("")&&!reqSystemCode.equals(null)&&!reqSystemCode.equals("Tất cả")) {
+            linkToSearch = linkToSearch+"&req_system_code="+reqSystemCode;
+        }
+        if (!reqDepCode.equals("")&&!reqDepCode.equals(null)&&!reqDepCode.equals("Tất cả")) {
+            linkToSearch = linkToSearch+"&req_dep_code="+reqDepCode;
+        }
+        if (!reqUser.equals("")&&!reqUser.equals(null)&&!reqUser.equals("Tất cả")) {
+            linkToSearch = linkToSearch+"&req_user="+reqUser;
+        }
+        if (!proDepCode.equals("")&&!proDepCode.equals(null)) {
+            linkToSearch = linkToSearch+"&pro_dep_code="+proDepCode;
+        }
+        if (!proUser.equals("")&&!proUser.equals(null)) {
+            linkToSearch = linkToSearch+"&pro_user="+proUser;
+        }
+        if (!ticketId.equals("")&&!ticketId.equals(null)) {
+            linkToSearch = linkToSearch+"&ticket_id="+ticketId;
+        }
+        if (!reqStatus.equals("")&&!reqStatus.equals(null)&&!reqStatus.equals("Tất cả")) {
+            linkToSearch = linkToSearch+"&req_status="+reqStatus;
+        }
     }
 
     private class SearchRequest extends AsyncTask<String, Void, String> {
@@ -115,14 +161,14 @@ public class RequestofUser extends AppCompatActivity {
 
         protected  void onPostExecute(String s){
             super.onPostExecute(s);
-            getlistUserRQ(s);
+            getlistSearchRQ(s);
             if (rqList.size()==0) {
                 Toast.makeText(getApplicationContext(), "Không có yêu cầu nào.", Toast.LENGTH_LONG).show();
             }
         }
     }
 
-    private String getlistUserRQ(String s){
+    private String getlistSearchRQ(String s){
         try {
             JSONArray jsonAr = new JSONArray(s);
             for (int i = 0; i < jsonAr.length(); i++){

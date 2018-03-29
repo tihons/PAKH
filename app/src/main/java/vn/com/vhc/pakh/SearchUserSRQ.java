@@ -17,7 +17,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,47 +33,46 @@ import java.util.Calendar;
 import info.Department;
 import info.LinkAPI;
 import info.Staff;
+import info.UserInfo;
 
-public class Search extends AppCompatActivity {
+public class SearchUserSRQ extends AppCompatActivity {
 
-    ArrayAdapter<String> hethongAdapter, donviguiAdapter, nguoiguiAdapter, donvixulyAdapter, nguoixulyAdapter, trangthaiAdapter;
+    ArrayAdapter<String> hethongAdapter, donvixulyAdapter, nguoixulyAdapter, trangthaiAdapter;
 
-    Spinner hethongSpinner, donviguiSpinner, nguoiguiSpinner, donvixulySpinner, nguoixulySpinner, trangthaiSpinner;
+    Spinner hethongSpinner, donvixulySpinner, nguoixulySpinner, trangthaiSpinner;
     ImageButton addRequest, infoSearch;
     Button search;
     EditText mayeucau, tieude;
-    TextView tvFromTime, tvToTime, tvPCXL, tvDANGXL, tvDAXL;
+    TextView tvFromTime, tvToTime, tvPCXL, tvDANGXL, tvDAXL, userTV, userDepartTV;
 
     ArrayList<String> arrayJsondata = new ArrayList<String>();
     ArrayList<String> hethongList = new ArrayList<String>();
-
-//    ArrayList<String> dvgName = new ArrayList<String>();
-//    ArrayList<String> nguoiguiName = new ArrayList<String>();
-//    ArrayList<String> dvxlName = new ArrayList<String>();
-//    ArrayList<String> nguoixlName = new ArrayList<String>();
-
-    ArrayList<Department> donviguiList = new ArrayList<Department>();
-    ArrayList<Staff> nguoiguiList = new ArrayList<Staff>();
     ArrayList<Department> donvixulyList = new ArrayList<Department>();
     ArrayList<Staff> nguoixulyList = new ArrayList<Staff>();
 
-    String [] trangthaiList = {"Phân Công", "Đang Xử Lý", "Đã Xử Lý"};
+    String [] trangthaiList = {"Tất cả", "PHAN_CONG_XU_LY", "DANG_XU_LY", "DA_XU_LY"};
 
+    UserInfo userInfo = new UserInfo();
     LinkAPI linkapi = new LinkAPI();
     String linkstaff, PCXL, DANGXL, DAXL;
     String departCodegui = "";
     String departCodexuly = "";
+    String username, userDepartcode;
 
     int day, month, year;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.search);
+        setContentView(R.layout.search_user_srq);
+
+        username = userInfo.getUsername();
+        userDepartcode = userInfo.getDepartmentCode();
 
         addView();
         Date();
         addAdapter();
+
         new ReadJSONObject().execute();
         hethongAdapter.notifyDataSetChanged();
         ClickEvents();
@@ -83,8 +81,8 @@ public class Search extends AppCompatActivity {
     private void addView() {
         tieude = (EditText) findViewById(R.id.tieudeS);
         hethongSpinner = (Spinner) findViewById(R.id.hethong);
-        donviguiSpinner = (Spinner) findViewById(R.id.donvigui);
-        nguoiguiSpinner = (Spinner) findViewById(R.id.nguoigui);
+        userTV = (TextView) findViewById(R.id.donvigui);
+        userDepartTV = (TextView) findViewById(R.id.nguoigui);
         donvixulySpinner = (Spinner) findViewById(R.id.donvixuly);
         nguoixulySpinner = (Spinner) findViewById(R.id.nguoixuly);
         tvFromTime = (TextView) findViewById(R.id.fromtime);
@@ -95,28 +93,26 @@ public class Search extends AppCompatActivity {
         infoSearch = (ImageButton) findViewById(R.id.btn_Info);
 
         search = (Button) findViewById(R.id.search);
+
+        userTV.setText(username);
+        userDepartTV.setText(userDepartcode);
     }
 
     private void addAdapter() {
         hethongAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
         hethongAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         hethongSpinner.setAdapter(hethongAdapter);
-
-        donviguiAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
-        donviguiAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        donviguiSpinner.setAdapter(donviguiAdapter);
-
-        nguoiguiAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
-        nguoiguiAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        nguoiguiSpinner.setAdapter(nguoiguiAdapter);
+        hethongAdapter.add("Tất cả");
 
         donvixulyAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
         donvixulyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         donvixulySpinner.setAdapter(donvixulyAdapter);
+        donvixulyAdapter.add("Tất cả");
 
         nguoixulyAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
         nguoixulyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         nguoixulySpinner.setAdapter(nguoixulyAdapter);
+        nguoixulyAdapter.add("Tất cả");
 
         trangthaiAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, trangthaiList);
         trangthaiAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -139,7 +135,7 @@ public class Search extends AppCompatActivity {
         tvFromTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatePickerDialog datePickerDialog = new DatePickerDialog(Search.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(SearchUserSRQ.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         month = month + 1;
@@ -153,7 +149,7 @@ public class Search extends AppCompatActivity {
         tvToTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatePickerDialog datePickerDialog = new DatePickerDialog(Search.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(SearchUserSRQ.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         month = month + 1;
@@ -164,33 +160,18 @@ public class Search extends AppCompatActivity {
             }
         });
 
-        donviguiSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                nguoiguiAdapter.clear();
-                String dc = donviguiList.get(position).getDepartmentCode();
-                linkstaff = linkapi.linkStaff + dc;
-                departCodegui = dc;
-
-                new Read_clickDVGui().execute(linkstaff);
-
-                nguoiguiAdapter.notifyDataSetChanged();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
         donvixulySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 nguoixulyAdapter.clear();
+                nguoixulyAdapter.add("Tất cả");
 
-                String dc = donvixulyList.get(position).getDepartmentCode();
+                String dc = null;
+                if (position!=0) {
+                    dc = donvixulyList.get(position).getDepartmentCode();
+                }
                 linkstaff = linkapi.linkStaff + dc;
-                departCodexuly = dc;
+//                departCodexuly = dc;
 
                 new Read_clickDVXuly().execute(linkstaff);
 
@@ -207,26 +188,26 @@ public class Search extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Search.this, ShowRequest.class);
+                Intent intent = new Intent(SearchUserSRQ.this, ShowUserSRQ.class);
                 intent.putExtra("fromtime", tvFromTime.getText().toString());
                 intent.putExtra("totime", tvToTime.getText().toString());
                 intent.putExtra("tieude", tieude.getText().toString());
                 intent.putExtra("hethong", hethongSpinner.getSelectedItem().toString());
-                intent.putExtra("donvigui", departCodegui);
-                intent.putExtra("nguoigui", nguoiguiSpinner.getSelectedItem().toString());
-                intent.putExtra("donvixuly", departCodexuly);
+                intent.putExtra("donvigui", userDepartcode);
+                intent.putExtra("nguoigui", username);
+                intent.putExtra("donvixuly", donvixulySpinner.getSelectedItem().toString());
                 intent.putExtra("nguoixuly", nguoixulySpinner.getSelectedItem().toString());
                 intent.putExtra("mayeucau", mayeucau.getText().toString());
                 intent.putExtra("trangthai", trangthaiSpinner.getSelectedItem().toString());
-                Search.this.startActivity(intent);
+                SearchUserSRQ.this.startActivity(intent);
             }
         });
 
         addRequest.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Search.this, AddRequest.class);
-                Search.this.startActivity(intent);
+                Intent intent = new Intent(SearchUserSRQ.this, AddRequest.class);
+                SearchUserSRQ.this.startActivity(intent);
             }
         });
 
@@ -256,43 +237,11 @@ public class Search extends AppCompatActivity {
         protected void onPostExecute(ArrayList<String> result) {
             super.onPostExecute(result);
             getlistHethong();
-            getlistDonvigui();
+//            getlistDonvigui();
             getlistDonvixuly();
             PCXL = arrayJsondata.get(2);
             DANGXL = arrayJsondata.get(3);
             DAXL = arrayJsondata.get(4);
-        }
-    }
-
-    private class Read_clickDVGui extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... strings) {
-            StringBuilder content = new StringBuilder();
-            try {
-                URL url = new URL(strings[0]);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                    content = new StringBuilder();
-                    String line;
-
-                    while ((line = br.readLine()) != null) {
-                        content.append(line);
-                    }
-                    br.close();
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                return null;
-            }
-            return content.toString();
-        }
-
-        protected  void onPostExecute(String s){
-            super.onPostExecute(s);
-            getlistNguoigui(s);
         }
     }
 
@@ -342,50 +291,6 @@ public class Search extends AppCompatActivity {
         }
     }
 
-    private void getlistDonvigui(){
-        try {
-            JSONArray jsonAr = new JSONArray(arrayJsondata.get(1));
-            for (int i = 0; i < jsonAr.length(); i++){
-                JSONObject obj = jsonAr.getJSONObject(i);
-                Integer Id = obj.getInt("id");
-                String departmentCode = obj.getString("departmentCode");
-                String departmentName = obj.getString("departmentName");
-                Department dpm = new Department(Id, departmentCode, departmentName);
-                donviguiList.add(dpm);
-//                dvgName.add(donviguiList.get(i).getDepartmentName());
-                donviguiAdapter.add(donviguiList.get(i).getDepartmentName());
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-    private String getlistNguoigui(String s){
-        try {
-            nguoiguiList.clear();
-            JSONArray jsonAr = new JSONArray(s);
-            for (int i = 0; i < jsonAr.length(); i++){
-                JSONObject obj = jsonAr.getJSONObject(i);
-                Integer Id = obj.getInt("id");
-                String username = obj.getString("username");
-                String password = obj.getString("password");
-                String fullname = obj.getString("fullname");
-                String position = obj.getString("position");
-                String phone = obj.getString("phone");
-                String gender = obj.getString("gender");
-                String email = obj.getString("email");
-                String departmentCode = obj.getString("departmentCode");
-                String isenable = obj.getString("isEnable");
-                Staff staff = new Staff(Id, username, password, fullname, position, phone, gender, email, departmentCode, isenable);
-                nguoiguiList.add(staff);
-//                nguoiguiName.add(nguoiguiList.get(i).getFullname());
-                nguoiguiAdapter.add(nguoiguiList.get(i).getFullname());
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return arrayJsondata.get(0);
-    }
-
     private void getlistDonvixuly(){
         try {
             donvixulyList = new ArrayList<Department>();
@@ -398,8 +303,7 @@ public class Search extends AppCompatActivity {
                 String departmentName = obj.getString("departmentName");
                 Department dpm = new Department(Id, departmentCode, departmentName);
                 donvixulyList.add(dpm);
-//                dvxlName.add(donvixulyList.get(i).getDepartmentName());
-                donvixulyAdapter.add(donvixulyList.get(i).getDepartmentName());
+                donvixulyAdapter.add(donvixulyList.get(i).getDepartmentCode());
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -423,8 +327,7 @@ public class Search extends AppCompatActivity {
                 String isenable = obj.getString("isEnable");
                 Staff staff = new Staff(Id, username, password, fullname, position, phone, gender, email, departmentCode, isenable);
                 nguoixulyList.add(staff);
-//                nguoixlName.add(nguoixulyList.get(i).getFullname());
-                nguoixulyAdapter.add(nguoixulyList.get(i).getFullname());
+                nguoixulyAdapter.add(nguoixulyList.get(i).getUsername());
             }
         } catch (JSONException e) {
             e.printStackTrace();

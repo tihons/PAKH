@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import info.LinkAPI;
 import info.Request;
 
-public class ShowRequest extends AppCompatActivity {
+public class ShowUserSRQ extends AppCompatActivity {
 
     ListView requestView;
     RequestAdapter rqAdapter;
@@ -79,7 +79,7 @@ public class ShowRequest extends AppCompatActivity {
                 String proPlan = rqList.get(position-1).getPro_plan();
                 String proContent = rqList.get(position-1).getPro_content();
 
-                Intent intent = new Intent(ShowRequest.this, Detail.class);
+                Intent intent = new Intent(ShowUserSRQ.this, Detail.class);
                 intent.putExtra("RqTitle", rqTitle);
                 intent.putExtra("RqContent", rqContent);
                 intent.putExtra("RqSysCode", rqSysCode);
@@ -89,7 +89,7 @@ public class ShowRequest extends AppCompatActivity {
                 intent.putExtra("ProPlan", proPlan);
                 intent.putExtra("ProContent", proContent);
 
-                ShowRequest.this.startActivity(intent);
+                ShowUserSRQ.this.startActivity(intent);
             }
         });
     }
@@ -110,7 +110,7 @@ public class ShowRequest extends AppCompatActivity {
         if(!reqTitle.equals("")&&!reqTitle.equals(null)) {
             linkToSearch = linkToSearch+"&req_title="+reqTitle;
         }
-        if (!reqSystemCode.equals("")&&!reqSystemCode.equals(null)) {
+        if (!reqSystemCode.equals("")&&!reqSystemCode.equals(null)&&!reqSystemCode.equals("Tất cả")) {
             linkToSearch = linkToSearch+"&req_system_code="+reqSystemCode;
         }
         if (!reqDepCode.equals("")&&!reqDepCode.equals(null)) {
@@ -119,16 +119,16 @@ public class ShowRequest extends AppCompatActivity {
         if (!reqUser.equals("")&&!reqUser.equals(null)) {
             linkToSearch = linkToSearch+"&req_user="+reqUser;
         }
-        if (!proDepCode.equals("")&&!proDepCode.equals(null)) {
+        if (!proDepCode.equals("")&&!proDepCode.equals(null)&&!proDepCode.equals("Tất cả")) {
             linkToSearch = linkToSearch+"&pro_dep_code="+proDepCode;
         }
-        if (!proUser.equals("")&&!proUser.equals(null)) {
+        if (!proUser.equals("")&&!proUser.equals(null)&&!proUser.equals("Tất cả")) {
             linkToSearch = linkToSearch+"&pro_user="+proUser;
         }
         if (!ticketId.equals("")&&!ticketId.equals(null)) {
             linkToSearch = linkToSearch+"&ticket_id="+ticketId;
         }
-        if (!reqStatus.equals("")&&!reqStatus.equals(null)) {
+        if (!reqStatus.equals("")&&!reqStatus.equals(null)&&!reqStatus.equals("Tất cả")) {
             linkToSearch = linkToSearch+"&req_status="+reqStatus;
         }
     }

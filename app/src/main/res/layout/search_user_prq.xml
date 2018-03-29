@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="vn.com.vhc.pakh.Search"
+    tools:context="vn.com.vhc.pakh.SearchUserSRQ"
     android:weightSum="10"
     android:orientation="vertical">
 
@@ -173,17 +173,23 @@
             android:weightSum="1"
             android:orientation="horizontal">
 
-            <Spinner
+            <TextView
                 android:id="@+id/donvixuly"
                 android:layout_width="50dp"
                 android:layout_height="35dp"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.5"
+                android:text="Test"
+                android:textColor="@android:color/black"
+                android:padding="5dp" />
 
-            <Spinner
+            <TextView
                 android:id="@+id/nguoixuly"
                 android:layout_width="50dp"
                 android:layout_height="35dp"
-                android:layout_weight="0.5" />
+                android:layout_weight="0.5"
+                android:text="Test"
+                android:textColor="@android:color/black"
+                android:padding="5dp"/>
 
         </LinearLayout>
 

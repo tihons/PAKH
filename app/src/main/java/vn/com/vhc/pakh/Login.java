@@ -30,6 +30,7 @@ import info.UserInfo;
 public class Login extends AppCompatActivity {
 
     ConnectionDetector cd;
+    UserSessionManager session;
 
     UserInfo userInfo;
     EditText edtUsername, edtPassword;
@@ -48,10 +49,14 @@ public class Login extends AppCompatActivity {
 //        getWindow().setBackgroundDrawableResource(R.drawable.background);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         cd = new ConnectionDetector(this);
+        session = new UserSessionManager(getApplicationContext());
 
+        userpass = "";
         edtUsername = (EditText) findViewById(R.id.edt_User);
         edtPassword = (EditText) findViewById(R.id.edt_Password);
         login = (Button) findViewById(R.id.login);
+
+        Toast.makeText(getApplicationContext(), "User Login Status: " + session.isLoggedIn(), Toast.LENGTH_LONG).show();
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,11 +99,15 @@ public class Login extends AppCompatActivity {
     }
 
     private void CheckPass() {
-        String md5pass = encryptMD5(passInput);
-        if (md5pass.equals(userpass)){
+//        String md5pass = encryptMD5(passInput);
+        if (!userpass.equals("") && !userpass.equals(null)){
             countDownTimer.cancel();
-            Intent intent = new Intent(Login.this, Dashboard.class);
-            Login.this.startActivity(intent);
+            session.createLoginSession(userInfo.getUsername(), userInfo.getEmail());
+            Intent i = new Intent(getApplicationContext(), Dashboard.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
+            finish();
         } else {
             countDownTimer.cancel();
             Toast.makeText(Login.this, "Username hoặc Password sai.", Toast.LENGTH_SHORT).show();

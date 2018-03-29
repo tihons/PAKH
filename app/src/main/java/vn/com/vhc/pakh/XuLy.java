@@ -3,7 +3,6 @@ package vn.com.vhc.pakh;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
-import android.net.http.RequestQueue;
 import android.os.AsyncTask;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +17,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import org.apache.http.HttpEntity;
@@ -42,21 +40,13 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import info.ContentShortInfo;
 import info.DictionnaryCauseInfo;
 import info.LinkAPI;
-import info.SystemTypeInfo;
 import info.UserInfo;
-import info.YeuCauInfo;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class XuLy extends AppCompatActivity {
     public static final String TAG = XuLy.class.getSimpleName();
@@ -169,7 +159,7 @@ public class XuLy extends AppCompatActivity {
                     });
                     thread.start();
 
-                    Intent intent = new Intent(XuLy.this, ShowRequest.class );
+                    Intent intent = new Intent(XuLy.this, ShowUserSRQ.class );
                     XuLy.this.startActivity(intent);
                 }
             }
@@ -204,7 +194,7 @@ public class XuLy extends AppCompatActivity {
 //                    new AddRequest().showAlertDialogNullContent();
                     showAlertDialogNullContent();
                 }else{
-                    Intent intent = new Intent(XuLy.this, ShowRequest.class );
+                    Intent intent = new Intent(XuLy.this, ShowUserSRQ.class );
                     XuLy.this.startActivity(intent);
                 }
 
