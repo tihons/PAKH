@@ -169,21 +169,21 @@ public class Login extends AppCompatActivity {
         return s;
     }
 
-    private String encryptMD5 (String data) {
-        try {
-            MessageDigest md = MessageDigest.getInstance("MD5");
-            byte[] messageDigest = md.digest(data.getBytes());
-            BigInteger num = new BigInteger(1, messageDigest);
-            String hashtext = num.toString(16);
-            while (hashtext.length() < 32) {
-                hashtext = "0" + hashtext;
-            }
-
-            return hashtext;
-        } catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
-        }
-    }
+//    private String encryptMD5 (String data) {
+//        try {
+//            MessageDigest md = MessageDigest.getInstance("MD5");
+//            byte[] messageDigest = md.digest(data.getBytes());
+//            BigInteger num = new BigInteger(1, messageDigest);
+//            String hashtext = num.toString(16);
+//            while (hashtext.length() < 32) {
+//                hashtext = "0" + hashtext;
+//            }
+//
+//            return hashtext;
+//        } catch (NoSuchAlgorithmException e) {
+//            throw new RuntimeException(e);
+//        }
+//    }
 }
 
 

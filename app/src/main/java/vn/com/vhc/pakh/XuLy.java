@@ -64,7 +64,7 @@ public class XuLy extends AppCompatActivity {
     EditText content, contentPrivate;
     TextView muc1, muc2, noidung1, noidung2, goneRequestDetail;
 
-    String ticketid, ID;
+    String ticketid, ID, reqUser, reqTitle, sdt;
     DictionnaryCauseInfo dictionnaryCauseInfo;
 
     JSONArray arrayCase1, arrayCase2;
@@ -83,8 +83,12 @@ public class XuLy extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.xu_ly);
 
-//        ticketid = getIntent().getExtras().getString("TicketID");
-//        ID = getIntent().getExtras().getString("ID");
+        ticketid = getIntent().getExtras().getString("TicketID");
+        ID = getIntent().getExtras().getString("ID");
+        reqUser = getIntent().getExtras().getString("reqUser");
+        reqTitle = getIntent().getExtras().getString("reqTitle");
+        sdt = getIntent().getExtras().getString("phone");
+
         final LinearLayout layoutForward = (LinearLayout) findViewById(R.id.layoutForward);
 
         new ReadJSONForward().execute(linkapi.linkForward+ticketid);

@@ -28,6 +28,7 @@ import java.util.ArrayList;
 
 import info.LinkAPI;
 import info.Request;
+import info.UserInfo;
 
 public class ShowUserPRQ extends AppCompatActivity {
 
@@ -36,10 +37,11 @@ public class ShowUserPRQ extends AppCompatActivity {
     LayoutInflater inflater;
 
     ArrayList<Request> rqList;
+    ArrayList<String> rqUserList = new ArrayList<String>();
 
     LinkAPI linkapi = new LinkAPI();
     String startReqDate, endReqDate, reqTitle, reqSystemCode, reqDepCode,
-            reqUser, proDepCode, proUser, ticketId, reqStatus, linkToSearch;
+            reqUser, proDepCode, proUser, ticketId, reqStatus, linkToSearch, sdt;
 
     ImageButton infoRQ;
     @Override
@@ -51,8 +53,8 @@ public class ShowUserPRQ extends AppCompatActivity {
 
         inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         requestView = (ListView) findViewById(R.id.requestView);
-
         rqList = new ArrayList<Request>();
+
         new SearchRequest().execute(linkToSearch);
 
         View header = inflater.inflate(R.layout.show_request_header, null);
@@ -70,24 +72,19 @@ public class ShowUserPRQ extends AppCompatActivity {
         requestView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String rqTitle = rqList.get(position-1).getReq_title();
-                String rqContent = rqList.get(position-1).getReq_content();
-                String rqSysCode = rqList.get(position-1).getReq_system_code();
-                String proDepCode = rqList.get(position-1).getPro_dep_code();
-                String proUser = rqList.get(position-1).getPro_user();
-                String proActua = rqList.get(position-1).getPro_actua();
-                String proPlan = rqList.get(position-1).getPro_plan();
-                String proContent = rqList.get(position-1).getPro_content();
+                String ticketid = rqList.get(position-1).getTicketid();
+                String ID = rqList.get(position-1).getStt();
+                String reqUser = rqList.get(position-1).getReq_user();
+                String reqTitle = rqList.get(position-1).getReq_title();
 
-                Intent intent = new Intent(ShowUserPRQ.this, Detail.class);
-                intent.putExtra("RqTitle", rqTitle);
-                intent.putExtra("RqContent", rqContent);
-                intent.putExtra("RqSysCode", rqSysCode);
-                intent.putExtra("ProDepCode", proDepCode);
-                intent.putExtra("ProUser", proUser);
-                intent.putExtra("ProActua", proActua);
-                intent.putExtra("ProPlan", proPlan);
-                intent.putExtra("ProContent", proContent);
+                new Read_UserInfo().execute(linkapi.linkUser+reqUser);
+
+                Intent intent = new Intent(ShowUserPRQ.this, XuLy.class);
+                intent.putExtra("TicketID", ticketid);
+                intent.putExtra("ID", ID);
+                intent.putExtra("reqUser", reqUser);
+                intent.putExtra("reqTitle", reqTitle);
+                intent.putExtra("phone", sdt);
 
                 ShowUserPRQ.this.startActivity(intent);
             }
@@ -194,6 +191,60 @@ public class ShowUserPRQ extends AppCompatActivity {
                 rqAdapter = new RequestAdapter(getApplicationContext(), R.layout.show_rqchild, rqList);
                 requestView.setAdapter(rqAdapter);
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
+
+    private class Read_UserInfo extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            StringBuilder content = new StringBuilder();
+            try {
+                URL url = new URL(strings[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    content = new StringBuilder();
+                    String line;
+
+                    while ((line = br.readLine()) != null) {
+                        content.append(line);
+                    }
+                    br.close();
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+            return content.toString();
+        }
+
+        protected  void onPostExecute(String s){
+            super.onPostExecute(s);
+            getUserInfo(s);
+        }
+    }
+
+    private String getUserInfo(String s) {
+        try {
+            JSONObject object = new JSONObject(s);
+            int id = object.getInt("id");
+            String username = object.getString("username");
+            String password = object.getString("password");
+            String fullname = object.getString("fullname");
+            String position = object.getString("position");
+            String phone = object.getString("phone");
+            String gender = object.getString("gender");
+            String email = object.getString("email");
+            String departmentCode = object.getString("departmentCode");
+            String isEnable  = object.getString("isEnable");
+
+            UserInfo userInfo = new UserInfo(id, username, password, fullname, position, phone, gender, email, departmentCode, isEnable);
+            sdt = userInfo.getPhone();
         } catch (JSONException e) {
             e.printStackTrace();
         }
