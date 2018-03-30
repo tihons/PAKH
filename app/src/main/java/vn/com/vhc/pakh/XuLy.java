@@ -226,8 +226,6 @@ public class XuLy extends AppCompatActivity {
             }
         });
 
-
-
         layoutForward.setVisibility(View.GONE);
         textViewGoneDetail.setVisibility(View.GONE);
         textViewShow.setOnClickListener(new OnClickListener() {
