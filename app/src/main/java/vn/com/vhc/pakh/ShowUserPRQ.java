@@ -122,7 +122,7 @@ public class ShowUserPRQ extends AppCompatActivity {
         if (!proDepCode.equals("")&&!proDepCode.equals(null)) {
             linkToSearch = linkToSearch+"&pro_dep_code="+proDepCode;
         }
-        if (!proUser.equals("")&&!proUser.equals(null)) {
+        if (!proUser.equals("")&&!proUser.equals(null)&&!proUser.equals("Tất cả")) {
             linkToSearch = linkToSearch+"&pro_user="+proUser;
         }
         if (!ticketId.equals("")&&!ticketId.equals(null)) {
