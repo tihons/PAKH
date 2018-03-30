@@ -164,7 +164,8 @@ public class XuLy extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 adapterCause2.clear();
                 adapterCause3.clear();
-                dic_code_id = listCause1.get(i).getCauseCode();
+
+                dic_code_id = String.valueOf(listCause1.get(i).getId());
                 int id = listCause1.get(i).getId();
                 new ReadJSONObjectCause2().execute(linkapi.linkCause+"level=2&id_parent="+id);
             }
@@ -219,7 +220,7 @@ public class XuLy extends AppCompatActivity {
                     });
                     thread.start();
 
-                    Intent intent = new Intent(XuLy.this, ShowUserPRQ.class );
+                    Intent intent = new Intent(XuLy.this, SearchUserPRQ.class );
                     XuLy.this.startActivity(intent);
                 }
             }
@@ -249,12 +250,13 @@ public class XuLy extends AppCompatActivity {
         btnChuyenTiep.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                new ResponseRequest().execute(linkapi.linkResponse);
+
                 if (content.length() == 0 || contentPrivate.length() == 0){
 //                    new AddRequest().showAlertDialogNullContent();
                     showAlertDialogNullContent();
                 }else{
-                    Intent intent = new Intent(XuLy.this, ShowUserSRQ.class );
+                    new ResponseRequest().execute(linkapi.linkResponse);
+                    Intent intent = new Intent(XuLy.this, Dashboard.class );
                     XuLy.this.startActivity(intent);
                 }
 
@@ -672,25 +674,26 @@ public class XuLy extends AppCompatActivity {
             postData();
             return null;
         }
+
         private void postData() {
             // Create a new HttpClient and Post Header
             HttpClient httpclient = new DefaultHttpClient();
             HttpPost httppost = new HttpPost(linkapi.linkResponse);
-
             try {
                 // Add your data
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+
                 nameValuePairs.add(new BasicNameValuePair("ticketid", ticketid));
                 nameValuePairs.add(new BasicNameValuePair("fw_dep_code", contentShortInfo.getFw_dep_code()));// phong ban forward
                 nameValuePairs.add(new BasicNameValuePair("fw_user",contentShortInfo.getFw_user()));// nguoi forward
                 nameValuePairs.add(new BasicNameValuePair("fw_content", contentShortInfo.getFw_content()));
-//                nameValuePairs.add(new BasicNameValuePair("receiving_date", ""+userInfo.getDepartmentCode()));//ngay nhan request
+                nameValuePairs.add(new BasicNameValuePair("receiving_date", reqDate));//ngay nhan request
                 nameValuePairs.add(new BasicNameValuePair("receiving_dep_code", userInfo.getDepartmentCode()));// phong ban nhan request
-                nameValuePairs.add(new BasicNameValuePair("receiving_user",userInfo.getUsername() ));// nguoi nhan request
+                nameValuePairs.add(new BasicNameValuePair("receiving_user", userInfo.getUsername()));// nguoi nhan request
                 nameValuePairs.add(new BasicNameValuePair("return_content", content.getText().toString()));
                 nameValuePairs.add(new BasicNameValuePair("return_content_private", contentPrivate.getText().toString()));
-                nameValuePairs.add(new BasicNameValuePair("dic_cause_id", ""+dic_code_id));
-                nameValuePairs.add(new BasicNameValuePair("dic_cause_id_private", ""+dic_code_id_private));
+                nameValuePairs.add(new BasicNameValuePair("dic_cause_id", dic_code_id));
+                nameValuePairs.add(new BasicNameValuePair("dic_cause_id_private", dic_code_id_private));
                 nameValuePairs.add(new BasicNameValuePair("file_id", ""));
                 httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 

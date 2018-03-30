@@ -61,13 +61,14 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
 
     YeuCauInfo yeuCauInfo;
     UserInfo userInfo;
-    static  ProcesserInfo processerInfo;
+    ProcesserInfo processerInfo;
     SystemInfo systemInfo;
 
     EditText title, content;
 
     ArrayAdapter<String> adapterSysType, adapterYeuCau, adaperYC2;
     ArrayList<SystemInfo> listSystemType = new ArrayList<SystemInfo>();
+    public ArrayList<ProcesserInfo> listProcesser = new ArrayList<ProcesserInfo>();
     ArrayList<YeuCauInfo> listCap1 = new ArrayList<YeuCauInfo>();
     ArrayList<YeuCauInfo> listCap2 = new ArrayList<YeuCauInfo>();
     Spinner spnSysType, spnYCCap1,spnYCCap2;
@@ -87,19 +88,17 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_request);
 
-        new Read_Processer().execute(linkapi.linkProcesser+"BHTT");
-
-
-
         userName = userInfo.getUsername();
         userDepart = userInfo.getDepartmentCode();
         userAPI_info = "&username="+userName+"&departmentCode="+userDepart;
 
         addView();
         addAdapter();
-
+        new Read_Processer().execute(linkapi.linkProcesser+"BHTT");
         new ReadSystemType().execute(linkapi.linkHT);
+//        Toast.makeText(getApplicationContext(), listProcesser.get(0).getDepartmentCode().toString(), Toast.LENGTH_SHORT).show();
 
+//        doViXL.setText(listProcesser.get(0).getDepartmentCode().toString());
         ClickEvents();
     }
 
@@ -183,7 +182,8 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
             @Override
             public void onClick(View view) {
 
-
+                Intent intent = new Intent(AddRequest.this, Dashboard.class);
+                startActivity(intent);
             }
         });
         sendRequest.setOnClickListener(new View.OnClickListener() {
@@ -222,7 +222,7 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
             }
         });
 
-        doViXL.setText(""+processerInfo.getDepartmentCode());
+//        doViXL.setText(""+processerInfo.getDepartmentCode());
 
 
         spnYCCap1.setSelection(0);
@@ -541,11 +541,10 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
 
             try {
                 JSONObject object = new JSONObject(s);
-
                 String departmentCode = object.getString("departmentCode");
                 String proUser = object.getString("proUser");
                 processerInfo = new ProcesserInfo(departmentCode, proUser);
-
+                listProcesser.add(processerInfo);
 
             } catch (JSONException e) {
                 e.printStackTrace();

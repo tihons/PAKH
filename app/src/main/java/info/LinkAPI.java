@@ -3,9 +3,8 @@ package info;
 /**
  * Created by Duong on 3/14/2018.
  */
-
 public class LinkAPI {
-    private String api = "http://103.199.78.64:80";
+    private String api = "http://192.168.1.226:9080";
     public String linkLogin = api+"/user?";
     public String linkUser = api+"/user/";
     public String linkHT = api+"/sys/KT";
