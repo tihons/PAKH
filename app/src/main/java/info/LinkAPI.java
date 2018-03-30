@@ -5,7 +5,7 @@ package info;
  */
 
 public class LinkAPI {
-    private String api = "http://14.160.91.174:9080";
+    private String api = "http://103.199.78.64:80";
     public String linkLogin = api+"/user?";
     public String linkUser = api+"/user/";
     public String linkHT = api+"/sys/KT";

@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import org.apache.http.HttpEntity;
@@ -82,12 +84,15 @@ public class XuLy extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.xu_ly);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         ticketid = getIntent().getExtras().getString("TicketID");
         ID = getIntent().getExtras().getString("ID");
         reqUser = getIntent().getExtras().getString("reqUser");
         reqTitle = getIntent().getExtras().getString("reqTitle");
         sdt = getIntent().getExtras().getString("phone");
+
+//        Toast.makeText(getApplicationContext(), sdt, Toast.LENGTH_LONG).show();
 
         final LinearLayout layoutForward = (LinearLayout) findViewById(R.id.layoutForward);
 

@@ -33,30 +33,31 @@ import java.util.Calendar;
 import info.Department;
 import info.LinkAPI;
 import info.Staff;
+import info.SystemInfo;
 import info.UserInfo;
 
 public class SearchUserPRQ extends AppCompatActivity {
 
-    ArrayAdapter<String> hethongAdapter, donviguiAdapter, nguoiguiAdapter, trangthaiAdapter;
+    ArrayAdapter<String> hethongAdapter, donviguiAdapter, nguoiguiAdapter, nguoixulyAdapter, trangthaiAdapter;
 
-    Spinner hethongSpinner, donviguiSpinner, nguoiguiSpinner, trangthaiSpinner;
+    Spinner hethongSpinner, donviguiSpinner, nguoiguiSpinner, nguoixulySpinner,trangthaiSpinner;
     ImageButton addRequest, infoSearch;
     Button search;
     EditText mayeucau, tieude;
-    TextView tvFromTime, tvToTime, tvPCXL, tvDANGXL, tvDAXL, userTV, userDepartTV;
+    TextView tvFromTime, tvToTime, tvPCXL, tvDANGXL, tvDAXL, userDepartTV;
 
     ArrayList<String> arrayJsondata = new ArrayList<String>();
-    ArrayList<String> hethongList = new ArrayList<String>();
-
+    ArrayList<SystemInfo> hethongList = new ArrayList<SystemInfo>();
     ArrayList<Department> donviguiList = new ArrayList<Department>();
     ArrayList<Staff> nguoiguiList = new ArrayList<Staff>();
+    ArrayList<Staff> nguoixulyList = new ArrayList<Staff>();
     String [] trangthaiList = {"Tất cả", "PHAN_CONG_XU_LY", "DANG_XU_LY", "DA_XU_LY"};
 
     UserInfo userInfo = new UserInfo();
     LinkAPI linkapi = new LinkAPI();
     String linkstaff, PCXL, DANGXL, DAXL;
 //    String departCodegui = "";
-    String username, userDepartcode;
+    String username, userDepartcode, systemCode;
 
     int day, month, year;
 
@@ -83,7 +84,7 @@ public class SearchUserPRQ extends AppCompatActivity {
         donviguiSpinner = (Spinner) findViewById(R.id.donvigui);
         nguoiguiSpinner = (Spinner) findViewById(R.id.nguoigui);
         userDepartTV = (TextView) findViewById(R.id.donvixuly);
-        userTV = (TextView) findViewById(R.id.nguoixuly);
+        nguoixulySpinner = (Spinner) findViewById(R.id.nguoixuly);
         tvFromTime = (TextView) findViewById(R.id.fromtime);
         tvToTime = (TextView) findViewById(R.id.totime);
         mayeucau = (EditText) findViewById(R.id.mayeucau);
@@ -93,7 +94,6 @@ public class SearchUserPRQ extends AppCompatActivity {
 
         search = (Button) findViewById(R.id.search);
 
-        userTV.setText(username);
         userDepartTV.setText(userDepartcode);
     }
 
@@ -112,6 +112,11 @@ public class SearchUserPRQ extends AppCompatActivity {
         nguoiguiAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         nguoiguiSpinner.setAdapter(nguoiguiAdapter);
         nguoiguiAdapter.add("Tất cả");
+
+        nguoixulyAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+        nguoixulyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        nguoixulySpinner.setAdapter(nguoixulyAdapter);
+        nguoixulyAdapter.add("Tất cả");
 
         trangthaiAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, trangthaiList);
         trangthaiAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -159,6 +164,22 @@ public class SearchUserPRQ extends AppCompatActivity {
             }
         });
 
+        hethongSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != 0) {
+                    systemCode = hethongList.get(position).getSysCode();
+                } else {
+                    systemCode = hethongSpinner.getSelectedItem().toString();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         donviguiSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -191,11 +212,11 @@ public class SearchUserPRQ extends AppCompatActivity {
                 intent.putExtra("fromtime", tvFromTime.getText().toString());
                 intent.putExtra("totime", tvToTime.getText().toString());
                 intent.putExtra("tieude", tieude.getText().toString());
-                intent.putExtra("hethong", hethongSpinner.getSelectedItem().toString());
+                intent.putExtra("hethong", systemCode);
                 intent.putExtra("donvigui", donviguiSpinner.getSelectedItem().toString());
                 intent.putExtra("nguoigui", nguoiguiSpinner.getSelectedItem().toString());
                 intent.putExtra("donvixuly", userDepartcode);
-                intent.putExtra("nguoixuly", username);
+                intent.putExtra("nguoixuly", nguoixulySpinner.getSelectedItem().toString());
                 intent.putExtra("mayeucau", mayeucau.getText().toString());
                 intent.putExtra("trangthai", trangthaiSpinner.getSelectedItem().toString());
                 SearchUserPRQ.this.startActivity(intent);
@@ -222,7 +243,7 @@ public class SearchUserPRQ extends AppCompatActivity {
 
         @Override
         protected ArrayList<String> doInBackground(Void... params) {
-            String [] api = {linkapi.linkHT, linkapi.linkDepart, linkapi.linkStatusNumber+"PHAN_CONG_XU_LY",
+            String [] api = {linkapi.linkHT, linkapi.linkDepart, linkapi.linkStaff+userDepartcode,linkapi.linkStatusNumber+"PHAN_CONG_XU_LY",
                     linkapi.linkStatusNumber+"DANG_XU_LY", linkapi.linkStatusNumber+"DA_XU_LY"};
 
             for (int i = 0; i < api.length; i++) {
@@ -237,9 +258,10 @@ public class SearchUserPRQ extends AppCompatActivity {
             super.onPostExecute(result);
             getlistHethong();
             getlistDonvigui();
-            PCXL = arrayJsondata.get(2);
-            DANGXL = arrayJsondata.get(3);
-            DAXL = arrayJsondata.get(4);
+            getlistNguoixuly();
+            PCXL = arrayJsondata.get(3);
+            DANGXL = arrayJsondata.get(4);
+            DAXL = arrayJsondata.get(5);
         }
     }
 
@@ -281,8 +303,10 @@ public class SearchUserPRQ extends AppCompatActivity {
             for (int i = 0; i < jsonAr.length(); i++){
                 JSONObject obj = jsonAr.getJSONObject(i);
                 String sysCode = obj.getString("systemCode");
-                hethongList.add(sysCode);
-                hethongAdapter.add(hethongList.get(i));
+                String sysName = obj.getString("systemName");
+                SystemInfo systemInfo = new SystemInfo(sysCode, sysName);
+                hethongList.add(systemInfo);
+                hethongAdapter.add(hethongList.get(i).getSysName());
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -305,6 +329,7 @@ public class SearchUserPRQ extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
     private String getlistNguoigui(String s){
         try {
             nguoiguiList.clear();
@@ -329,6 +354,30 @@ public class SearchUserPRQ extends AppCompatActivity {
             e.printStackTrace();
         }
         return arrayJsondata.get(0);
+    }
+
+    private void getlistNguoixuly() {
+        try {
+            JSONArray jsonAr = new JSONArray(arrayJsondata.get(2));
+            for (int i = 0; i < jsonAr.length(); i++){
+                JSONObject obj = jsonAr.getJSONObject(i);
+                Integer Id = obj.getInt("id");
+                String username = obj.getString("username");
+                String password = obj.getString("password");
+                String fullname = obj.getString("fullname");
+                String position = obj.getString("position");
+                String phone = obj.getString("phone");
+                String gender = obj.getString("gender");
+                String email = obj.getString("email");
+                String departmentCode = obj.getString("departmentCode");
+                String isenable = obj.getString("isEnable");
+                Staff staff = new Staff(Id, username, password, fullname, position, phone, gender, email, departmentCode, isenable);
+                nguoixulyList.add(staff);
+                nguoixulyAdapter.add(nguoixulyList.get(i).getUsername());
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void displayAlerDialog(){

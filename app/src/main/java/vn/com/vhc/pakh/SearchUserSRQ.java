@@ -33,6 +33,7 @@ import java.util.Calendar;
 import info.Department;
 import info.LinkAPI;
 import info.Staff;
+import info.SystemInfo;
 import info.UserInfo;
 
 public class SearchUserSRQ extends AppCompatActivity {
@@ -46,10 +47,9 @@ public class SearchUserSRQ extends AppCompatActivity {
     TextView tvFromTime, tvToTime, tvPCXL, tvDANGXL, tvDAXL, userTV, userDepartTV;
 
     ArrayList<String> arrayJsondata = new ArrayList<String>();
-    ArrayList<String> hethongList = new ArrayList<String>();
+    ArrayList<SystemInfo> hethongList = new ArrayList<SystemInfo>();
     ArrayList<Department> donvixulyList = new ArrayList<Department>();
     ArrayList<Staff> nguoixulyList = new ArrayList<Staff>();
-
     String [] trangthaiList = {"Tất cả", "PHAN_CONG_XU_LY", "DANG_XU_LY", "DA_XU_LY"};
 
     UserInfo userInfo = new UserInfo();
@@ -57,7 +57,7 @@ public class SearchUserSRQ extends AppCompatActivity {
     String linkstaff, PCXL, DANGXL, DAXL;
     String departCodegui = "";
     String departCodexuly = "";
-    String username, userDepartcode;
+    String username, userDepartcode, systemCode;
 
     int day, month, year;
 
@@ -160,6 +160,22 @@ public class SearchUserSRQ extends AppCompatActivity {
             }
         });
 
+        hethongSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != 0) {
+                    systemCode = hethongList.get(position).getSysCode();
+                } else {
+                    systemCode = hethongSpinner.getSelectedItem().toString();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         donvixulySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -192,7 +208,7 @@ public class SearchUserSRQ extends AppCompatActivity {
                 intent.putExtra("fromtime", tvFromTime.getText().toString());
                 intent.putExtra("totime", tvToTime.getText().toString());
                 intent.putExtra("tieude", tieude.getText().toString());
-                intent.putExtra("hethong", hethongSpinner.getSelectedItem().toString());
+                intent.putExtra("hethong", systemCode);
                 intent.putExtra("donvigui", userDepartcode);
                 intent.putExtra("nguoigui", username);
                 intent.putExtra("donvixuly", donvixulySpinner.getSelectedItem().toString());
@@ -237,7 +253,6 @@ public class SearchUserSRQ extends AppCompatActivity {
         protected void onPostExecute(ArrayList<String> result) {
             super.onPostExecute(result);
             getlistHethong();
-//            getlistDonvigui();
             getlistDonvixuly();
             PCXL = arrayJsondata.get(2);
             DANGXL = arrayJsondata.get(3);
@@ -283,8 +298,10 @@ public class SearchUserSRQ extends AppCompatActivity {
             for (int i = 0; i < jsonAr.length(); i++){
                 JSONObject obj = jsonAr.getJSONObject(i);
                 String sysCode = obj.getString("systemCode");
-                hethongList.add(sysCode);
-                hethongAdapter.add(hethongList.get(i));
+                String sysName = obj.getString("systemName");
+                SystemInfo systemInfo = new SystemInfo(sysCode, sysName);
+                hethongList.add(systemInfo);
+                hethongAdapter.add(hethongList.get(i).getSysName());
             }
         } catch (JSONException e) {
             e.printStackTrace();

@@ -182,7 +182,7 @@
                 android:textColor="@android:color/black"
                 android:padding="5dp" />
 
-            <TextView
+            <Spinner
                 android:id="@+id/nguoixuly"
                 android:layout_width="50dp"
                 android:layout_height="35dp"

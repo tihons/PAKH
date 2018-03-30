@@ -41,7 +41,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import info.LinkAPI;
-import info.SystemTypeInfo;
+import info.SystemInfo;
 import info.UserInfo;
 import info.YeuCauInfo;
 
@@ -59,12 +59,12 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
 
     YeuCauInfo yeuCauInfo;
     UserInfo userInfo;
-    SystemTypeInfo systemTypeInfo;
+    SystemInfo systemInfo;
 
     EditText title, content;
 
     ArrayAdapter<String> adapterSysType, adapterYeuCau, adaperYC2;
-    ArrayList<SystemTypeInfo> listSystemType = new ArrayList<SystemTypeInfo>();
+    ArrayList<SystemInfo> listSystemType = new ArrayList<SystemInfo>();
     ArrayList<YeuCauInfo> listCap1 = new ArrayList<YeuCauInfo>();
     ArrayList<YeuCauInfo> listCap2 = new ArrayList<YeuCauInfo>();
     Spinner spnSysType, spnYCCap1,spnYCCap2;
@@ -86,7 +86,7 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
 
         userName = userInfo.getUsername();
         userDepart = userInfo.getDepartmentCode();
-        userAPI_info = "&username="+userName+"&departmentCode="+userDepart;
+        userAPI_info = "username="+userName+"&departmentCode="+userDepart;
 
         addView();
         addAdapter();
@@ -198,7 +198,7 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
                 adapterYeuCau.clear();
                 adaperYC2.clear();
 
-                String syscode = listSystemType.get(pos).getSysType();
+                String syscode = listSystemType.get(pos).getSysCode();
                 linkC1 = linkapi.linkYeuCau+userAPI_info+"&systemCode="+syscode;
                 new ReadJSONObjectYCCap1().execute(linkC1);
 //                isHas = listCap1.get(0).getId();
@@ -216,7 +216,7 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 adaperYC2.clear();
                 int isHas = listCap1.get(i).getId();
-                donvixuli = listCap1.get(i).getRequestName();
+                donvixuli = listCap1.get(i).getDepartmentCode();
                 doViXL.setText(donvixuli);
                 new ReadJSONObjectYCCap2().execute(linkC1+"&isHas="+isHas);
             }
@@ -317,13 +317,13 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
                 for (int i = 0; i < arrSysType.length(); i ++){
                     JSONObject object = arrSysType.getJSONObject(i);
 
-                    systemTypeInfo = new SystemTypeInfo();
+                    systemInfo = new SystemInfo();
                     String sysType = object.getString("systemCode");
 
-                    systemTypeInfo.setSysType(sysType);
+                    systemInfo.setSysCode(sysType);
 
-                    listSystemType.add(systemTypeInfo);
-                    adapterSysType.add(""+listSystemType.get(i).getSysType());
+                    listSystemType.add(systemInfo);
+                    adapterSysType.add(""+listSystemType.get(i).getSysCode());
                 }
 
             } catch (JSONException e) {
