@@ -20,6 +20,7 @@ public class LinkAPI {
     public String linkCause = api+"/cause?";
     public String linkPutRequestDetail = api+"/request/updateRequestDetail/";
     public String linkPutRequest = api+"/request/updateRequest/";
+    public String linkProcesser = api+"/process/";
 
 //    http://103.199.78.64:80 Mobifone API
 //    http://14.160.91.174:9080

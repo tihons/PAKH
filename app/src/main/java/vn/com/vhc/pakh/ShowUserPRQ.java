@@ -76,6 +76,8 @@ public class ShowUserPRQ extends AppCompatActivity {
                 String ID = rqList.get(position-1).getStt();
                 String reqUser = rqList.get(position-1).getReq_user();
                 String reqTitle = rqList.get(position-1).getReq_title();
+                String reqDate = rqList.get(position-1).getReq_date();
+
 
                 new Read_UserInfo().execute(linkapi.linkUser+reqUser);
 
@@ -85,6 +87,7 @@ public class ShowUserPRQ extends AppCompatActivity {
                 intent.putExtra("reqUser", reqUser);
                 intent.putExtra("reqTitle", reqTitle);
                 intent.putExtra("phone", sdt);
+                intent.putExtra("ReqDate", reqDate);
 
                 ShowUserPRQ.this.startActivity(intent);
             }

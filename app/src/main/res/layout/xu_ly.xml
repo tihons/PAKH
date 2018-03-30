@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="10"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
     tools:context="vn.com.vhc.pakh.XuLy">
     <TextView
         android:layout_width="match_parent"
@@ -27,11 +29,82 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="66dp"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="30dp"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="5"
+                        android:layout_height="match_parent"
+                        android:text="NGƯỜI GỬI"
+                        android:gravity="center"
+                        android:textColor="@color/colorApp"/>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_weight="5"
+                        android:layout_height="match_parent"
+                        android:text="SỐ ĐIỆN THOẠI"
+                        android:textColor="@color/colorApp"
+                        android:gravity="center"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="35dp"
+                    android:orientation="horizontal"
+                    android:weightSum="10">
+                    <TextView
+                        android:id="@+id/nguoigui"
+                        android:layout_width="0dp"
+                        android:layout_weight="5"
+                        android:textSize="20sp"
+                        android:layout_height="match_parent"
+                        android:textColor="#000000"
+                        android:gravity="center|left" />
+                    <TextView
+                        android:id="@+id/sdtNguoiGui"
+                        android:layout_width="0dp"
+                        android:layout_weight="5"
+                        android:textSize="20sp"
+                        android:textColor="#000000"
+                        android:layout_height="match_parent"
+                        android:gravity="center"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:orientation="horizontal"
+                android:weightSum="10">
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="4.8"
+                    android:background="@color/colorApp"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="0.4"/>
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="4.8"
+                    android:background="@color/colorApp"/>
+
+
+            </LinearLayout>
+
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:gravity="bottom|left"
-                android:text="NGUYÊN NHÂN YÊU CẦU CẤP 1 - 2"
+                android:text="NGUYÊN NHÂN YÊU CẦU CẤP 1"
                 android:textColor="@color/colorApp" />
             <Spinner
                 android:id="@+id/spNNNYCC1"
@@ -42,6 +115,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/colorApp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:gravity="bottom|left"
+                android:text="NGUYÊN NHÂN YÊU CẦU CẤP 2"
+                android:textColor="@color/colorApp" />
             <Spinner
                 android:id="@+id/spNNNYCC2"
                 android:layout_width="match_parent"
@@ -53,9 +132,41 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
+                android:gravity="bottom|left"
+                android:text="NGUYÊN NHÂN YÊU CẦU CẤP 3"
+                android:textColor="@color/colorApp" />
+            <Spinner
+                android:id="@+id/spNNNYCC3"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                tools:ignore="DuplicateIds" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorApp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:gravity="bottom|left"
+                android:text="NỘI DUNG YÊU CẦU"
+                android:textColor="@color/colorApp" />
+            <TextView
+                android:id="@+id/noidungYeuCau"
+                android:layout_width="match_parent"
+                android:layout_height="40dp" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/colorApp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
                 android:text="NỘI DUNG XỬ LÝ"
                 android:gravity="bottom|left"
                 android:textColor="@color/colorApp"/>
+
 
             <EditText
                 android:id="@+id/noidungXL"

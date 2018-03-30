@@ -35,12 +35,14 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import info.LinkAPI;
+import info.ProcesserInfo;
 import info.SystemInfo;
 import info.UserInfo;
 import info.YeuCauInfo;
@@ -59,6 +61,7 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
 
     YeuCauInfo yeuCauInfo;
     UserInfo userInfo;
+    static  ProcesserInfo processerInfo;
     SystemInfo systemInfo;
 
     EditText title, content;
@@ -77,16 +80,20 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
     String linkC1;
     String userName, userDepart, userAPI_info;
 
-    String donvixuli = "";
+    static String pro_user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_request);
 
+        new Read_Processer().execute(linkapi.linkProcesser+"BHTT");
+
+
+
         userName = userInfo.getUsername();
         userDepart = userInfo.getDepartmentCode();
-        userAPI_info = "username="+userName+"&departmentCode="+userDepart;
+        userAPI_info = "&username="+userName+"&departmentCode="+userDepart;
 
         addView();
         addAdapter();
@@ -176,6 +183,7 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
             @Override
             public void onClick(View view) {
 
+
             }
         });
         sendRequest.setOnClickListener(new View.OnClickListener() {
@@ -192,15 +200,19 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
             }
         });
 
+        spnSysType.setSelection(0);
         spnSysType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
                 adapterYeuCau.clear();
                 adaperYC2.clear();
 
+
                 String syscode = listSystemType.get(pos).getSysCode();
                 linkC1 = linkapi.linkYeuCau+userAPI_info+"&systemCode="+syscode;
                 new ReadJSONObjectYCCap1().execute(linkC1);
+
+//                pro_user = processerInfo.getProUser();
 //                isHas = listCap1.get(0).getId();
             }
 
@@ -209,6 +221,10 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
 
             }
         });
+
+        doViXL.setText(""+processerInfo.getDepartmentCode());
+
+
         spnYCCap1.setSelection(0);
 
         spnYCCap1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -216,8 +232,6 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 adaperYC2.clear();
                 int isHas = listCap1.get(i).getId();
-                donvixuli = listCap1.get(i).getDepartmentCode();
-                doViXL.setText(donvixuli);
                 new ReadJSONObjectYCCap2().execute(linkC1+"&isHas="+isHas);
             }
 
@@ -318,12 +332,14 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
                     JSONObject object = arrSysType.getJSONObject(i);
 
                     systemInfo = new SystemInfo();
-                    String sysType = object.getString("systemCode");
 
-                    systemInfo.setSysCode(sysType);
+                    String systemCode = object.getString("systemCode");
+                    String systemName = object.getString("systemName");
+                    systemInfo.setSysCode(systemCode);
+                    systemInfo.setSysName(systemName);
 
                     listSystemType.add(systemInfo);
-                    adapterSysType.add(""+listSystemType.get(i).getSysCode());
+                    adapterSysType.add(""+listSystemType.get(i).getSysName());
                 }
 
             } catch (JSONException e) {
@@ -462,6 +478,7 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
                 // Add your data
 
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
+                nameValuePairs.add(new BasicNameValuePair("pro_user", pro_user));
                 nameValuePairs.add(new BasicNameValuePair("req_dep_code", userInfo.getDepartmentCode()));
                 nameValuePairs.add(new BasicNameValuePair("req_user", userInfo.getUsername()));
                 nameValuePairs.add(new BasicNameValuePair("req_system_code",sysCode));
@@ -493,5 +510,50 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
             }
         }
     }
+    private class Read_Processer extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            StringBuilder content = new StringBuilder();
+            try {
+                URL url = new URL(strings[0]);
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    content = new StringBuilder();
+                    String line;
+
+                    while ((line = br.readLine()) != null) {
+                        content.append(line);
+                    }
+                    br.close();
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                return null;
+            }
+            return content.toString();
+        }
+
+        protected  void onPostExecute(String s){
+            super.onPostExecute(s);
+
+            try {
+                JSONObject object = new JSONObject(s);
+
+                String departmentCode = object.getString("departmentCode");
+                String proUser = object.getString("proUser");
+                processerInfo = new ProcesserInfo(departmentCode, proUser);
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+
 }
 

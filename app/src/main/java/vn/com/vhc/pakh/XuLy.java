@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -40,21 +39,29 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import info.ContentShortInfo;
 import info.DictionnaryCauseInfo;
 import info.LinkAPI;
 import info.UserInfo;
+import info.YeuCauInfo;
+import okhttp3.Request;
+import okhttp3.Response;
 
 public class XuLy extends AppCompatActivity {
     public static final String TAG = XuLy.class.getSimpleName();
 
-    UserInfo userInfo = new UserInfo();
     ContentShortInfo  contentShortInfo = new ContentShortInfo();
+    UserInfo userInfo = new UserInfo();
 
     URL urlUpdateDetail = null;
     URL urlUpdateRequest = null;
@@ -64,41 +71,43 @@ public class XuLy extends AppCompatActivity {
 
     Button btnOver, btnChuyenTiep;
     EditText content, contentPrivate;
-    TextView muc1, muc2, noidung1, noidung2, goneRequestDetail;
+    TextView muc1, muc2, noidung1, noidung2, nguoiGui, sdtNguoiGui, noiDungYeuCau;
 
-    String ticketid, ID, reqUser, reqTitle, sdt;
+    String ticketid, ID, requestUser, requestTitle, sdt, reqDate;
     DictionnaryCauseInfo dictionnaryCauseInfo;
 
-    JSONArray arrayCase1, arrayCase2;
-    ArrayAdapter<String> adapterCause1, adapterCause2;
+    JSONArray arrayCase1, arrayCase2, arrayCase3;
+    ArrayAdapter<String> adapterCause1, adapterCause2, adapterCause3;
     ArrayList<DictionnaryCauseInfo> listCause1 = new ArrayList<DictionnaryCauseInfo>();
     ArrayList<DictionnaryCauseInfo> listCause2 = new ArrayList<DictionnaryCauseInfo>();
+    ArrayList<DictionnaryCauseInfo> listCause3 = new ArrayList<DictionnaryCauseInfo>();
 
-    Spinner spnCause1, spnCause2;
+    Spinner spnCause1, spnCause2, spnCause3;
 
     String dic_code_id_private, dic_code_id;
 
     LinkAPI linkapi = new LinkAPI();
 
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    String date = simpleDateFormat.format(new Date());
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.xu_ly);
-        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
-        ticketid = getIntent().getExtras().getString("TicketID");
-        ID = getIntent().getExtras().getString("ID");
-        reqUser = getIntent().getExtras().getString("reqUser");
-        reqTitle = getIntent().getExtras().getString("reqTitle");
-        sdt = getIntent().getExtras().getString("phone");
 
-//        Toast.makeText(getApplicationContext(), sdt, Toast.LENGTH_LONG).show();
 
         final LinearLayout layoutForward = (LinearLayout) findViewById(R.id.layoutForward);
 
         new ReadJSONForward().execute(linkapi.linkForward+ticketid);
+
+
         TextView textViewShow = (TextView) findViewById(R.id.shortContent);
         final TextView textViewGoneDetail = (TextView)  findViewById(R.id.textViewGoneDetail);
+        nguoiGui = (TextView) findViewById(R.id.nguoigui);
+        sdtNguoiGui = (TextView) findViewById(R.id.sdtNguoiGui);
+        noiDungYeuCau= (TextView) findViewById(R.id.noidungYeuCau);
         muc1 = (TextView) findViewById(R.id.truoc1);
         muc1 = (TextView) findViewById(R.id.truoc2);
         noidung1 = (TextView) findViewById(R.id.contentForward1);
@@ -111,8 +120,25 @@ public class XuLy extends AppCompatActivity {
 
         spnCause1 = (Spinner) findViewById(R.id.spNNNYCC1);
         spnCause2 = (Spinner) findViewById(R.id.spNNNYCC2);
+        spnCause3 = (Spinner) findViewById(R.id.spNNNYCC3);
+
 
         textViewShow.setPaintFlags(textViewShow.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+
+        ticketid = getIntent().getExtras().getString("TicketID");
+        ID = getIntent().getExtras().getString("ID");
+        requestUser = getIntent().getExtras().getString("reqUser");
+        requestTitle = getIntent().getExtras().getString("reqTitle");
+        sdt = getIntent().getExtras().getString("phone");
+        reqDate = getIntent().getExtras().getString("ReqDate");
+
+
+        nguoiGui.setText(requestUser);
+        sdtNguoiGui.setText(sdt);
+        noiDungYeuCau.setText(requestTitle);
+
+
+
 
         adapterCause1 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
         adapterCause1.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -122,6 +148,10 @@ public class XuLy extends AppCompatActivity {
         adapterCause2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
         adapterCause2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnCause2.setAdapter(adapterCause2);
+
+        adapterCause3 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
+        adapterCause3.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnCause3.setAdapter(adapterCause3);
 
         new ReadJSONObjectCause1().execute(linkapi.linkCause+"level=1");
         spnCause1.setSelection(0);
@@ -133,16 +163,22 @@ public class XuLy extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 adapterCause2.clear();
+                adapterCause3.clear();
                 dic_code_id = listCause1.get(i).getCauseCode();
                 int id = listCause1.get(i).getId();
                 new ReadJSONObjectCause2().execute(linkapi.linkCause+"level=2&id_parent="+id);
             }
         });
 
+        spnCause2.setSelection(0);
         spnCause2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                dic_code_id_private = listCause2.get(i).getCauseCode();
+                adapterCause3.clear();
+                int idCause3 = listCause2.get(i).getId();
+
+                new ReadJSONObjectCause3().execute(linkapi.linkCause+"level=2&id_parent="+idCause3);
+
             }
 
             @Override
@@ -150,6 +186,21 @@ public class XuLy extends AppCompatActivity {
 
             }
         });
+
+        spnCause3.setSelection(0);
+        spnCause3.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+                dic_code_id_private = String.valueOf(listCause3.get(i).getId());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
 
         btnOver.setOnClickListener(new OnClickListener() {
             @Override
@@ -168,7 +219,7 @@ public class XuLy extends AppCompatActivity {
                     });
                     thread.start();
 
-                    Intent intent = new Intent(XuLy.this, ShowUserSRQ.class );
+                    Intent intent = new Intent(XuLy.this, ShowUserPRQ.class );
                     XuLy.this.startActivity(intent);
                 }
             }
@@ -221,7 +272,15 @@ public class XuLy extends AppCompatActivity {
         DefaultHttpClient client = new DefaultHttpClient();
         HttpPut put= new HttpPut(String.valueOf(urlUpdateDetail));
 
+
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        String date = simpleDateFormat.format(new Date());
+
         List<NameValuePair> pairs = new ArrayList<NameValuePair>();
+
+        pairs.add(new BasicNameValuePair("receiving_date",reqDate));
+        pairs.add(new BasicNameValuePair("actualy_finish",date));
         pairs.add(new BasicNameValuePair("receiving_dep_code", userInfo.getDepartmentCode()));
         pairs.add(new BasicNameValuePair("receiving_user", userInfo.getUsername()));
         pairs.add(new BasicNameValuePair("return_content", content.getText().toString()));
@@ -234,7 +293,7 @@ public class XuLy extends AppCompatActivity {
             put.setEntity(new UrlEncodedFormEntity(pairs));
             HttpResponse response = client.execute(put);
 
-            Log.e("XULY", ""+response);
+            Log.e("putRequestDetail", ""+response);
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -243,6 +302,7 @@ public class XuLy extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     public void putRequest(){
@@ -258,6 +318,8 @@ public class XuLy extends AppCompatActivity {
 
 
         List<NameValuePair> pairs = new ArrayList<NameValuePair>();
+
+        pairs.add(new BasicNameValuePair("pro_actual", date));
         pairs.add(new BasicNameValuePair("pro_content", ""+content.getText().toString()));
         pairs.add(new BasicNameValuePair("pro_user", ""+userInfo.getUsername()));
         pairs.add(new BasicNameValuePair("pro_dep_code", userInfo.getDepartmentCode()));
@@ -267,7 +329,7 @@ public class XuLy extends AppCompatActivity {
             put.setEntity(new UrlEncodedFormEntity(pairs));
             HttpResponse response = client.execute(put);
 
-            Log.e("XULY", ""+response);
+            Log.e("Update Request:", ""+response);
 
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -441,6 +503,79 @@ public class XuLy extends AppCompatActivity {
         }
     }
 
+    private class ReadJSONObjectCause3 extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... strings) {
+            StringBuilder content = new StringBuilder();
+            try {
+                URL url = new URL (strings[0]);
+
+                InputStreamReader inputStreamReader = new InputStreamReader(url.openConnection().getInputStream());
+
+                BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+                String line = "";
+                while((line = bufferedReader.readLine()) != null){
+                    content.append(line);
+                }
+                bufferedReader.close();
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return content.toString();
+        }
+        protected  void onPostExecute(String s){
+            super.onPostExecute(s);
+//            Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+            try {
+                arrayCase3 = new JSONArray(s);
+
+                for (int i = 0; i < arrayCase3.length(); i ++){
+                    JSONObject object = arrayCase3.getJSONObject(i);
+
+                    dictionnaryCauseInfo = new DictionnaryCauseInfo();
+
+                    causeCode = object.getString("causeCode");
+                    causeName = object.getString("causeName");
+                    isEnable = object.getString("isEnable");
+                    ordering = object.getInt("ordering");
+                    createdBy = object.getString("createdBy");
+                    isParent = object.getString("isParent");
+                    idHas = object.getString("idHas");
+                    depCode = object.getString("depCode");
+                    isStatus = object.getString("isStatus");
+                    systemCode = object.getString("systemCode");
+                    id = object.getInt("id");
+
+                    dictionnaryCauseInfo.setCauseCode(causeCode);
+                    dictionnaryCauseInfo.setCauseName(causeName);
+                    dictionnaryCauseInfo.setIsEnable(isEnable);
+                    dictionnaryCauseInfo.setOrdering(ordering);
+                    dictionnaryCauseInfo.setCreateBy(createdBy);
+                    dictionnaryCauseInfo.setIsParent(isParent);
+                    dictionnaryCauseInfo.setIdHas(idHas);
+                    dictionnaryCauseInfo.setDepCode(depCode);
+                    dictionnaryCauseInfo.setIsStatus(isStatus);
+                    dictionnaryCauseInfo.setSystemCode(systemCode);
+                    dictionnaryCauseInfo.setId(id);
+
+                    listCause3.add(dictionnaryCauseInfo);
+                    adapterCause3.add(""+listCause3.get(i).getCauseName());
+//                    Log.e(TAG, "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+//                    Log.e(TAG, ""+listCause1.get(i).getCauseName());
+//                    Toast.makeText(getApplicationContext(), listCause1.get(i).getId()+"-"+listCause1.get(i).getCauseName(), Toast.LENGTH_SHORT).show();
+
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
     class ReadJSONForward extends AsyncTask<String, Void, String> {
 
         int id, ticketid;
@@ -551,7 +686,7 @@ public class XuLy extends AppCompatActivity {
                 nameValuePairs.add(new BasicNameValuePair("fw_content", contentShortInfo.getFw_content()));
 //                nameValuePairs.add(new BasicNameValuePair("receiving_date", ""+userInfo.getDepartmentCode()));//ngay nhan request
                 nameValuePairs.add(new BasicNameValuePair("receiving_dep_code", userInfo.getDepartmentCode()));// phong ban nhan request
-                nameValuePairs.add(new BasicNameValuePair("receiving_user","Thuc Ok" ));// nguoi nhan request
+                nameValuePairs.add(new BasicNameValuePair("receiving_user",userInfo.getUsername() ));// nguoi nhan request
                 nameValuePairs.add(new BasicNameValuePair("return_content", content.getText().toString()));
                 nameValuePairs.add(new BasicNameValuePair("return_content_private", contentPrivate.getText().toString()));
                 nameValuePairs.add(new BasicNameValuePair("dic_cause_id", ""+dic_code_id));
@@ -566,7 +701,7 @@ public class XuLy extends AppCompatActivity {
                 if (resEntity != null) {
 
                     String responseStr = EntityUtils.toString(resEntity).trim();
-                    Log.v(TAG, "Response: " +  responseStr);
+                    Log.v(TAG, "postData: " +  responseStr);
 
                     // you can add an if statement here and do other actions based on the response
                 }
@@ -580,15 +715,6 @@ public class XuLy extends AppCompatActivity {
 
     }
 
-    public class PutRequest extends AsyncTask<String, String, String> {
-        @Override
-        protected String doInBackground(String... strings) {
-            postData();
-            return null;
-        }
-        private void postData() {
 
-        }
-    }
 }
 
