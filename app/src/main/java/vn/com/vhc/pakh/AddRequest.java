@@ -68,13 +68,13 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
 
     ArrayAdapter<String> adapterSysType, adapterYeuCau, adaperYC2;
     ArrayList<SystemInfo> listSystemType = new ArrayList<SystemInfo>();
-    public ArrayList<ProcesserInfo> listProcesser = new ArrayList<ProcesserInfo>();
+    ArrayList<ProcesserInfo> listProcesser = new ArrayList<ProcesserInfo>();
     ArrayList<YeuCauInfo> listCap1 = new ArrayList<YeuCauInfo>();
     ArrayList<YeuCauInfo> listCap2 = new ArrayList<YeuCauInfo>();
     Spinner spnSysType, spnYCCap1,spnYCCap2;
 
-    private Button sendRequest, btnRequestOne, btnRight;
-    private TextView doViXL;
+    Button sendRequest, btnRequestOne, btnRight;
+    TextView doViXL;
 
     CheckBox receiveMail, receiveSMS;
     LinkAPI linkapi = new LinkAPI();
@@ -96,9 +96,8 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
         addAdapter();
         new Read_Processer().execute(linkapi.linkProcesser+"BHTT");
         new ReadSystemType().execute(linkapi.linkHT);
-//        Toast.makeText(getApplicationContext(), listProcesser.get(0).getDepartmentCode().toString(), Toast.LENGTH_SHORT).show();
+        adapterSysType.notifyDataSetChanged();
 
-//        doViXL.setText(listProcesser.get(0).getDepartmentCode().toString());
         ClickEvents();
     }
 
@@ -122,17 +121,16 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
     private void addAdapter() {
         adapterSysType = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
         adapterSysType.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         spnSysType.setAdapter(adapterSysType);
 
         adapterYeuCau = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
         adapterYeuCau.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spnYCCap1.setAdapter(adapterYeuCau);
 
         adaperYC2 = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item);
         adaperYC2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
         spnYCCap2.setAdapter(adaperYC2);
-        spnYCCap1.setAdapter(adapterYeuCau);
+
     }
 
     private void ClickEvents() {
@@ -200,7 +198,6 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
             }
         });
 
-        spnSysType.setSelection(0);
         spnSysType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long id) {
@@ -212,6 +209,8 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
                 linkC1 = linkapi.linkYeuCau+userAPI_info+"&systemCode="+syscode;
                 new ReadJSONObjectYCCap1().execute(linkC1);
 
+                adapterYeuCau.notifyDataSetChanged();
+                adaperYC2.notifyDataSetChanged();
 //                pro_user = processerInfo.getProUser();
 //                isHas = listCap1.get(0).getId();
             }
@@ -222,17 +221,13 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
             }
         });
 
-//        doViXL.setText(""+processerInfo.getDepartmentCode());
-
-
-        spnYCCap1.setSelection(0);
-
         spnYCCap1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 adaperYC2.clear();
                 int isHas = listCap1.get(i).getId();
                 new ReadJSONObjectYCCap2().execute(linkC1+"&isHas="+isHas);
+                adaperYC2.notifyDataSetChanged();
             }
 
             @Override
@@ -241,7 +236,6 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
             }
         });
 
-        spnYCCap2.setSelection(0);
         spnYCCap2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
@@ -292,7 +286,6 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
         alertDialog.show();
     }
 
-
     @Override
     public void onClick(View view) {
 
@@ -339,7 +332,7 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
                     systemInfo.setSysName(systemName);
 
                     listSystemType.add(systemInfo);
-                    adapterSysType.add(""+listSystemType.get(i).getSysName());
+                    adapterSysType.add(listSystemType.get(i).getSysName());
                 }
 
             } catch (JSONException e) {
@@ -454,7 +447,7 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
                     yeuCauInfo.setIsStatus(isStatus);
 
                     listCap2.add(yeuCauInfo);
-                    adaperYC2.add(""+listCap2.get(i).getRequestName());
+                    adaperYC2.add(listCap2.get(i).getRequestName());
                 }
 
             } catch (JSONException e) {
@@ -545,6 +538,7 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
                 String proUser = object.getString("proUser");
                 processerInfo = new ProcesserInfo(departmentCode, proUser);
                 listProcesser.add(processerInfo);
+                doViXL.setText(listProcesser.get(0).getDepartmentCode());
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -552,7 +546,5 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
 
         }
     }
-
-
 }
 

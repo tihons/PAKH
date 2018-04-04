@@ -78,7 +78,6 @@ public class ShowUserPRQ extends AppCompatActivity {
                 String reqTitle = rqList.get(position-1).getReq_title();
                 String reqDate = rqList.get(position-1).getReq_date();
 
-
                 new Read_UserInfo().execute(linkapi.linkUser+reqUser);
 
                 Intent intent = new Intent(ShowUserPRQ.this, XuLy.class);
