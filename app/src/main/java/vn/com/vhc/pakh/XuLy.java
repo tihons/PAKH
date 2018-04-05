@@ -284,7 +284,7 @@ public class XuLy extends AppCompatActivity {
                     "application/x-www-form-urlencoded");
             String urlParameters =
 
-                 "receiving_date=06-03-2018" +
+                 "receiving_date=" + reqDate +
                   "&receiving_dep_code=" + userInfo.getDepartmentCode() +
                   "&receiving_user="+userInfo.getUsername()+
                    "&actualy_finish="+date+
