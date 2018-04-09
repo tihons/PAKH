@@ -94,7 +94,6 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
 
         addView();
         addAdapter();
-        new Read_Processer().execute(linkapi.linkProcesser+"BHTT");
         new ReadSystemType().execute(linkapi.linkHT);
         adapterSysType.notifyDataSetChanged();
 
@@ -208,11 +207,12 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
                 String syscode = listSystemType.get(pos).getSysCode();
                 linkC1 = linkapi.linkYeuCau+userAPI_info+"&systemCode="+syscode;
                 new ReadJSONObjectYCCap1().execute(linkC1);
+                new Read_Processer().execute(linkapi.linkProcesser+syscode);
+                sysCode = syscode;
 
                 adapterYeuCau.notifyDataSetChanged();
                 adaperYC2.notifyDataSetChanged();
-//                pro_user = processerInfo.getProUser();
-//                isHas = listCap1.get(0).getId();
+
             }
 
             @Override
@@ -539,6 +539,7 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
                 processerInfo = new ProcesserInfo(departmentCode, proUser);
                 listProcesser.add(processerInfo);
                 doViXL.setText(listProcesser.get(0).getDepartmentCode());
+                pro_user = proUser;
 
             } catch (JSONException e) {
                 e.printStackTrace();
