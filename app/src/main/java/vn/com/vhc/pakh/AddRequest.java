@@ -53,7 +53,6 @@ public class AddRequest extends AppCompatActivity implements View.OnClickListene
     String checkMail = "";
     String checkSMS = "";
     String sysCode = "";
-    String pro_dep_code = "";
 
     int id;
     String requestCode, requestName, departmentCode, isEnable, isStatus;
