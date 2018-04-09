@@ -136,6 +136,7 @@ public class XuLy extends AppCompatActivity {
         requestTitle = getIntent().getExtras().getString("reqTitle");
         sdt = getIntent().getExtras().getString("phone");
         reqDate = getIntent().getExtras().getString("ReqDate");
+        reqDate = simpleDateFormat.format(new Date());
 
         new ReadJSONForward().execute(linkapi.linkForward+ticketid);
 
@@ -284,7 +285,7 @@ public class XuLy extends AppCompatActivity {
                     "application/x-www-form-urlencoded");
             String urlParameters =
 
-                 "receiving_date=" + reqDate +
+                 "receiving_date=" +  reqDate +
                   "&receiving_dep_code=" + userInfo.getDepartmentCode() +
                   "&receiving_user="+userInfo.getUsername()+
                    "&actualy_finish="+date+
